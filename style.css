@@ -1,0 +1,38 @@
+:root {
+  --bg: #F7F3EA; --card: #FFFDF8; --ink: #33302B; --soft: #5E574E;
+  --moss: #3F6B4E; --line: #E3DED2; --coral: #E98B5A;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1C1D1B; --card: #272824; --ink: #EEEAE2; --soft: #B5AEA3;
+    --moss: #9CC7A6; --line: #34352F; }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 17px/1.6 "Nunito", ui-rounded, -apple-system, system-ui, sans-serif;
+}
+main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+a { color: var(--moss); }
+header.top { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+header.top a { text-decoration: none; color: var(--soft); font-weight: 800; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--coral); display: inline-block; }
+h1 { font-size: 34px; line-height: 1.2; margin: 0 0 8px; }
+h2 { font-size: 22px; margin: 32px 0 8px; }
+.lead { color: var(--soft); font-size: 19px; margin: 0 0 24px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+  padding: 20px; margin: 16px 0; display: flex; gap: 16px; align-items: center;
+}
+.card img { width: 72px; height: 72px; border-radius: 16px; flex: none; }
+.card h3 { margin: 0; font-size: 20px; }
+.card p { margin: 4px 0 0; color: var(--soft); }
+.links a { margin-right: 16px; font-weight: 700; }
+.lang { display: flex; gap: 8px; margin: 0 0 24px; }
+.lang a {
+  padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line);
+  text-decoration: none; color: var(--ink); font-weight: 700;
+}
+.lang a.on { background: var(--moss); color: var(--bg); border-color: var(--moss); }
+.updated { color: var(--soft); font-size: 15px; }
+footer { margin-top: 48px; color: var(--soft); font-size: 15px; }
+ul { padding-left: 22px; }
