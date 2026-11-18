@@ -1,32 +1,46 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Moonemy Labs</title>
 <meta name="description" content="Moonemy Labs: apps tranquilas para el día a día.">
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="lang.js"></script>
 </head>
 <body>
-<main>
-  <header class="top"><span class="dot"></span><a href="./">Moonemy Labs</a></header>
-  <h1>Moonemy Labs</h1>
-  <p class="lead">Apps tranquilas para el día a día. · Calm apps for everyday life.</p>
-
-  <div class="card">
-    <img src="covewithin/icon.png" alt="">
+<div class="wrap">
+  <nav class="nav">
+    <a class="brand" href="./"><span class="dot"></span>Moonemy Labs</a>
+    <span class="spacer"></span>
+    <div class="langs" role="group" aria-label="Idioma / Language"><button data-l="es" aria-pressed="true">ES</button><button data-l="en" aria-pressed="false">EN</button></div>
+  </nav>
+  <section class="hero" style="grid-template-columns:1fr;padding-bottom:24px">
+    <div>
+      <h1 lang="es">Apps tranquilas para <span>el día a día</span>.</h1>
+      <h1 lang="en">Calm apps for <span>everyday life</span>.</h1>
+      <p class="lead" lang="es" style="max-width:44ch">Hacemos apps sencillas y amables, pensadas para mentes que necesitan menos ruido y más calma.</p>
+      <p class="lead" lang="en" style="max-width:44ch">We make simple, kind apps for minds that need less noise and more calm.</p>
+    </div>
+  </section>
+  <a class="app-card" href="covewithin/">
+    <img src="covewithin/logo.png" alt="">
     <div>
       <h3>CoveWithin</h3>
-      <p>Un pequeño espacio para volver a ti. · A little space to come back to yourself.</p>
-      <p class="links">
-        <a href="covewithin/">Ver app</a>
-        <a href="covewithin/privacy.html">Privacidad</a>
-        <a href="covewithin/support.html">Soporte</a>
-      </p>
+      <p lang="es">Un pequeño espacio para volver a ti. Rutinas suaves para mentes con TDAH.</p>
+      <p lang="en">A little space to come back to yourself. Gentle routines for ADHD minds.</p>
+      <div class="links"><span lang="es">Conocer la app →</span><span lang="en">Meet the app →</span></div>
     </div>
-  </div>
-
-  <footer>Contacto · Contact: <a href="mailto:moonemylabs@icloud.com">moonemylabs@icloud.com</a></footer>
-</main>
+  </a>
+  <div style="height:64px"></div>
+</div>
+<footer class="foot"><div class="wrap">
+  <span>© 2026 Moonemy Labs</span>
+  <a href="mailto:moonemylabs@icloud.com">moonemylabs@icloud.com</a>
+</div></footer>
 </body>
 </html>
