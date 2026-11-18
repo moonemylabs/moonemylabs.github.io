@@ -1,17 +1,26 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CoveWithin · Política de privacidad</title>
+<title>CoveWithin · Privacidad / Privacy</title>
+<link rel="icon" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
+<script src="../lang.js"></script>
 </head>
 <body>
-<main>
-  <header class="top"><span class="dot"></span><a href="./">CoveWithin</a></header>
-  <nav class="lang"><a class="on" href="#es">Español</a><a href="#en">English</a></nav>
-
-  <section id="es" lang="es">
+<div class="wrap">
+  <nav class="nav">
+    <a class="brand" href="./"><img src="icon.png" alt="">CoveWithin</a>
+    <span class="spacer"></span>
+    <div class="langs" role="group" aria-label="Idioma / Language"><button data-l="es" aria-pressed="true">ES</button><button data-l="en" aria-pressed="false">EN</button></div>
+  </nav>
+</div>
+<main class="doc">
+<section id="es" lang="es">
     <h1>Política de privacidad</h1>
     <p class="updated">Vigente desde el 17 de noviembre de 2026</p>
     <p>CoveWithin es una app de Moonemy Labs. Esta política explica qué pasa con tu información cuando la usas. En pocas palabras: <strong>no recopilamos ningún dato tuyo</strong>.</p>
@@ -44,10 +53,7 @@
     <h2>Contacto</h2>
     <p>Moonemy Labs · <a href="mailto:moonemylabs@icloud.com">moonemylabs@icloud.com</a></p>
   </section>
-
-  <hr style="border:none;border-top:1px solid var(--line);margin:48px 0">
-
-  <section id="en" lang="en">
+<section id="en" lang="en">
     <h1>Privacy Policy</h1>
     <p class="updated">Effective November 17, 2026</p>
     <p>CoveWithin is an app by Moonemy Labs. This policy explains what happens to your information when you use it. In short: <strong>we don't collect any of your data</strong>.</p>
@@ -80,8 +86,10 @@
     <h2>Contact</h2>
     <p>Moonemy Labs · <a href="mailto:moonemylabs@icloud.com">moonemylabs@icloud.com</a></p>
   </section>
-
-  <footer>© 2026 Moonemy Labs</footer>
 </main>
+<footer class="foot"><div class="wrap">
+  <span>© 2026 Moonemy Labs</span>
+  <span><a href="./">CoveWithin</a> · <a href="privacy.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a> · <a href="support.html"><span lang="es">Soporte</span><span lang="en">Support</span></a></span>
+</div></footer>
 </body>
 </html>
