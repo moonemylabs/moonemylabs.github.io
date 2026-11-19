@@ -71,6 +71,10 @@ h2 { font-size: clamp(28px, 4vw, 38px); line-height: 1.15; margin: 0 0 10px; let
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .feat { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 22px; }
 .feat .e { font-size: 30px; line-height: 1; display: block; margin-bottom: 12px; }
+/* Iconos en pixel art: se agrandan sin suavizar los bordes. */
+.px { image-rendering: pixelated; image-rendering: crisp-edges; }
+img.e { width: 56px; height: 56px; }
+.privacy-card img.e { width: 72px; height: 72px; flex: none; }
 .feat h3 { margin: 0 0 4px; font-size: 19px; }
 .feat p { margin: 0; color: var(--soft); font-size: 16px; }
 .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
