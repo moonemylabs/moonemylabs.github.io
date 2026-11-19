@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Focus Universe — Build Your Galaxy, One Session at a Time</title>
+  <meta name="description" content="The Pomodoro timer that builds your personal galaxy of pixel stars. Every focus session earns a star."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#06040F;--purple:#9D4EDD;--teal:#00E5CC;--gold:#FFD700;
+      --amber:#FFAA00;--pink:#FF80AB;--blue:#4FC3F7;
+    }
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:#fff;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+    h1,h2,h3,.pixel{font-family:'Press Start 2P',monospace}
+
+    /* ── BG canvas fixed ── */
+    #bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    /* ── Sections ── */
+    section{position:relative;z-index:1}
+    .container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 32px;
+      background:linear-gradient(to bottom,rgba(6,4,15,.96),transparent);
+      backdrop-filter:blur(10px);
+    }
+    .nav-logo{display:flex;align-items:center;gap:10px}
+    .nav-logo img{width:34px;height:34px;border-radius:8px;image-rendering:pixelated}
+    .nav-logo span{font-family:'Press Start 2P',monospace;font-size:9px;color:#fff;letter-spacing:1px;line-height:1.5}
+    .nav-cta{
+      background:var(--teal);color:#000;
+      font-family:'Press Start 2P',monospace;font-size:8px;
+      padding:10px 18px;text-decoration:none;letter-spacing:1px;
+      transition:opacity .2s;image-rendering:pixelated;
+    }
+    .nav-cta:hover{opacity:.82}
+
+    /* ── HERO ── */
+    #hero{
+      min-height:100vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      text-align:center;padding:120px 24px 80px;
+      position:relative;overflow:hidden;
+    }
+    #hero-galaxy-canvas{
+      position:absolute;inset:0;width:100%;height:100%;
+      z-index:0;pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center}
+    .hero-icon{
+      width:104px;height:104px;border-radius:20px;margin-bottom:20px;
+      box-shadow:0 0 60px rgba(157,78,221,.65),0 0 120px rgba(0,229,204,.2);
+      animation:float 4s ease-in-out infinite;
+      image-rendering:pixelated;
+    }
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+    /* ── HERO brand name ── */
+    .hero-brand{
+      font-family:'Press Start 2P',monospace;
+      font-size:clamp(22px,5.5vw,52px);
+      letter-spacing:4px;line-height:1.3;
+      margin-bottom:10px;
+      background:linear-gradient(135deg,#fff 0%,var(--teal) 40%,var(--purple) 80%,var(--amber) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:drop-shadow(0 0 30px rgba(0,229,204,.55)) drop-shadow(0 0 60px rgba(157,78,221,.35));
+      animation:brandPulse 3s ease-in-out infinite;
+    }
+    @keyframes brandPulse{
+      0%,100%{filter:drop-shadow(0 0 30px rgba(0,229,204,.55)) drop-shadow(0 0 60px rgba(157,78,221,.35))}
+      50%{filter:drop-shadow(0 0 50px rgba(0,229,204,.85)) drop-shadow(0 0 100px rgba(157,78,221,.55))}
+    }
+    .hero-pixel-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(0,229,204,.4);
+      background:rgba(0,229,204,.07);
+      padding:5px 14px;margin-bottom:22px;
+      font-family:'Press Start 2P',monospace;font-size:7px;
+      color:var(--teal);letter-spacing:2px;
+    }
+    .hero-title{
+      font-size:clamp(11px,2vw,16px);line-height:1.9;letter-spacing:2px;
+      margin-bottom:16px;color:rgba(255,255,255,.75);
+    }
+    .hero-sub{
+      font-size:clamp(14px,1.8vw,17px);color:rgba(255,255,255,.55);
+      max-width:500px;line-height:1.8;margin:0 auto 36px;text-align:center;
+    }
+    /* ── Store badges ── */
+    .store-badges{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:24px}
+    .store-badge{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 20px;
+      border:1px solid rgba(255,255,255,.2);
+      background:rgba(255,255,255,.05);
+      text-decoration:none;color:#fff;
+      transition:background .2s,border-color .2s;
+      min-width:160px;
+    }
+    .store-badge:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.4)}
+    .store-badge svg{flex-shrink:0}
+    .store-badge-text{text-align:left}
+    .store-badge-text small{display:block;font-size:9px;color:rgba(255,255,255,.5);margin-bottom:1px}
+    .store-badge-text strong{display:block;font-size:14px;font-weight:700;letter-spacing:.5px}
+    /* Hero pixel stars row */
+    .hero-pxstars{
+      display:flex;justify-content:center;gap:14px;margin-bottom:46px;flex-wrap:wrap;
+    }
+    .hero-pxstars canvas{
+      image-rendering:pixelated;
+      filter:drop-shadow(0 0 12px currentColor);
+    }
+    .hero-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+    .btn-primary{
+      display:inline-block;padding:16px 32px;background:var(--teal);color:#000;
+      font-family:'Press Start 2P',monospace;font-size:9px;letter-spacing:1px;
+      text-decoration:none;
+      box-shadow:0 0 30px rgba(0,229,204,.4);
+      transition:transform .2s,box-shadow .2s;
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(0,229,204,.6)}
+    .btn-secondary{
+      display:inline-block;padding:16px 32px;border:2px solid var(--purple);
+      color:var(--purple);font-family:'Press Start 2P',monospace;font-size:9px;
+      letter-spacing:1px;text-decoration:none;transition:background .2s,color .2s;
+    }
+    .btn-secondary:hover{background:var(--purple);color:#fff}
+    .hero-note{margin-top:44px;font-size:11px;color:rgba(255,255,255,.28)}
+
+    /* ── GALAXY DEMO ── */
+    #galaxy-demo{padding:100px 0;text-align:center}
+    .galaxy-wrap{
+      position:relative;margin:48px auto 0;
+      width:min(700px,100%);
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.01);
+      overflow:hidden;
+    }
+    #galaxy-canvas{
+      width:100%;display:block;
+      image-rendering:pixelated;
+    }
+    .galaxy-label{
+      position:absolute;bottom:16px;right:20px;
+      font-family:'Press Start 2P',monospace;font-size:7px;
+      color:rgba(255,255,255,.25);letter-spacing:1px;
+    }
+
+    /* ── SECTION LABELS ── */
+    .slabel{font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:2px;margin-bottom:12px;display:block}
+    .stitle{font-family:'Press Start 2P',monospace;font-size:clamp(12px,2.5vw,20px);line-height:1.7;margin-bottom:14px}
+    .ssub{font-size:16px;color:rgba(255,255,255,.6);line-height:1.75;max-width:600px}
+
+    /* ── HOW IT WORKS ── */
+    #how{padding:100px 0}
+    .how-hdr{text-align:center;margin-bottom:60px}
+    .how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+    .step{
+      text-align:center;padding:28px 20px;
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.02);
+      transition:border-color .3s;
+    }
+    .step:hover{border-color:rgba(157,78,221,.5)}
+    .step-num{font-family:'Press Start 2P',monospace;font-size:24px;color:var(--teal);opacity:.45;margin-bottom:16px}
+    .step-icon{margin-bottom:14px;display:flex;justify-content:center}
+    .step h3{font-family:'Press Start 2P',monospace;font-size:9px;margin-bottom:10px;letter-spacing:1px}
+    .step p{font-size:13px;color:rgba(255,255,255,.58);line-height:1.7}
+
+    /* ── FEATURES ── */
+    #features{
+      padding:100px 0;
+      background:linear-gradient(to bottom,transparent,rgba(157,78,221,.05),transparent);
+    }
+    .feat-hdr{margin-bottom:56px}
+    .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+    .feat-card{
+      padding:26px;border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.02);
+      display:flex;gap:18px;align-items:flex-start;
+      transition:border-color .3s,background .3s;
+    }
+    .feat-card:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.04)}
+    .feat-icon{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:48px;height:48px}
+    .feat-card h3{font-family:'Press Start 2P',monospace;font-size:9px;margin-bottom:8px;letter-spacing:1px}
+    .feat-card p{font-size:13px;color:rgba(255,255,255,.58);line-height:1.6}
+
+    /* ── STARS SHOWCASE ── */
+    #stars{padding:100px 0;text-align:center}
+    .stars-hdr{margin-bottom:60px}
+    .stars-flex{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+    .star-cell{display:flex;flex-direction:column;align-items:center;gap:10px;width:90px}
+    .star-orb{
+      width:72px;height:72px;border-radius:50%;border:2px solid;
+      display:flex;align-items:center;justify-content:center;
+      transition:transform .3s;
+    }
+    .star-orb:hover{transform:scale(1.1)}
+    .star-orb canvas{image-rendering:pixelated}
+    .star-lbl{font-family:'Press Start 2P',monospace;font-size:6px;letter-spacing:1px;text-align:center;line-height:1.5}
+    .star-tag{font-size:9px;padding:2px 8px;font-weight:700;border-radius:2px}
+
+    /* ── ACHIEVEMENTS ── */
+    #achievements{
+      padding:100px 0;
+      background:linear-gradient(to bottom,transparent,rgba(0,229,204,.04),transparent);
+    }
+    .ach-hdr{text-align:center;margin-bottom:56px}
+    .ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px}
+    .ach-card{
+      padding:18px 14px;border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.02);text-align:center;
+      transition:border-color .3s,background .3s;
+    }
+    .ach-card:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.04)}
+    .ach-icon-wrap{display:flex;justify-content:center;margin-bottom:10px}
+    .ach-icon-wrap canvas{image-rendering:pixelated}
+    .ach-name{font-family:'Press Start 2P',monospace;font-size:6px;color:#fff;margin-bottom:6px;line-height:1.5}
+    .ach-desc{font-size:11px;color:rgba(255,255,255,.55);line-height:1.5}
+
+    /* ── PRICING ── */
+    #pricing{padding:100px 0;text-align:center}
+    .price-hdr{margin-bottom:60px}
+    .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;max-width:880px;margin:0 auto}
+    .price-card{padding:30px 22px;border:2px solid;position:relative;text-align:left;transition:box-shadow .3s}
+    .price-card.hi{box-shadow:0 0 40px rgba(0,229,204,.2)}
+    .price-badge{
+      position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+      font-family:'Press Start 2P',monospace;font-size:7px;
+      padding:4px 12px;color:#000;white-space:nowrap;
+    }
+    .price-label{font-family:'Press Start 2P',monospace;font-size:9px;letter-spacing:1px;margin-bottom:14px}
+    .price-amt{font-family:'Press Start 2P',monospace;font-size:clamp(18px,3.5vw,26px);color:#fff;margin-bottom:4px}
+    .price-sub{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:22px}
+    .price-btn{
+      display:block;width:100%;padding:13px;
+      font-family:'Press Start 2P',monospace;font-size:8px;
+      letter-spacing:1px;text-align:center;text-decoration:none;color:#000;
+      transition:opacity .2s;
+    }
+    .price-btn:hover{opacity:.82}
+    .prem-feats{max-width:640px;margin:44px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .pf{
+      display:flex;align-items:center;gap:10px;padding:10px 14px;
+      border:1px solid rgba(255,170,0,.2);background:rgba(255,170,0,.04);
+    }
+    .pf-icon{flex-shrink:0}
+    .pf span{font-size:13px}
+
+    /* ── CTA ── */
+    #cta{padding:120px 0;text-align:center;position:relative;overflow:hidden}
+    .cta-glow{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:600px;height:600px;border-radius:50%;
+      background:radial-gradient(circle,rgba(157,78,221,.15) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .cta-stats{display:flex;justify-content:center;gap:36px;margin-top:48px;flex-wrap:wrap}
+    .cta-stat p:first-child{font-family:'Press Start 2P',monospace;font-size:22px}
+    .cta-stat p:last-child{font-size:12px;color:rgba(255,255,255,.55)}
+
+    /* ── FOOTER ── */
+    footer{border-top:1px solid rgba(255,255,255,.07);padding:40px 0;text-align:center}
+    .foot-logo{font-family:'Press Start 2P',monospace;font-size:9px;margin-bottom:14px;
+      background:linear-gradient(135deg,var(--teal),var(--purple));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .foot-links{display:flex;justify-content:center;gap:22px;margin-bottom:14px;flex-wrap:wrap}
+    .foot-links a{font-size:12px;color:rgba(255,255,255,.28);text-decoration:none;transition:color .2s}
+    .foot-links a:hover{color:#fff}
+    footer p{font-size:11px;color:rgba(255,255,255,.25)}
+    .divider{height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.08),transparent)}
+
+    @media(max-width:640px){
+      nav{padding:12px 16px}
+      .nav-logo span{display:none}
+      .btn-primary,.btn-secondary{font-size:8px;padding:13px 18px}
+      .how-steps{grid-template-columns:1fr}
+      .feat-grid{grid-template-columns:1fr}
+      .ach-grid{grid-template-columns:repeat(2,1fr)}
+      .price-grid{grid-template-columns:1fr}
+      .prem-feats{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background space canvas -->
+<canvas id="bg"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="logo.png" alt="Focus Universe"/>
+    <span>FOCUS<br>UNIVERSE</span>
+  </div>
+  <a href="#pricing" class="nav-cta">GET FREE</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-galaxy-canvas"></canvas>
+  <div class="hero-content">
+    <img src="logo.png" class="hero-icon" alt="Focus Universe"/>
+    <h1 class="hero-brand">FOCUS UNIVERSE</h1>
+    <div class="hero-pixel-badge">★ PIXEL ART GALAXY ★</div>
+    <p class="hero-title">BUILD YOUR GALAXY · ONE SESSION AT A TIME</p>
+    <p class="hero-sub">The Pomodoro timer that turns your deep work into a living galaxy of pixel art stars. Every session earns a star. Every streak makes it grow.</p>
+    <div class="hero-pxstars" id="hero-stars-row"></div>
+    <div class="hero-btns">
+      <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app" class="btn-primary">⬇ DOWNLOAD FREE</a>
+      <a href="#pricing" class="btn-secondary">VIEW PREMIUM</a>
+    </div>
+    <div class="store-badges">
+      <a href="#" class="store-badge" aria-disabled="true" style="opacity:.6;pointer-events:none">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div class="store-badge-text"><small>Coming soon on the</small><strong>App Store</strong></div>
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app" class="store-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.22.99.14l13.23-7.52-2.9-2.93-11.32 10.31zm-1.67-20.1C1.2 4.04 1 4.54 1 5.14v13.72c0 .6.2 1.1.51 1.48l.08.07 7.69-7.74v-.18L1.59 3.59l-.08.07zM20.49 10.61l-2.85-1.62-3.19 3.22 3.19 3.22 2.88-1.63c.82-.47.82-1.72-.03-2.19zM4.17.38L17.4 7.9l-2.9 2.93L3.18.52c.35-.08.7-.03.99.14l.0-.28z"/></svg>
+        <div class="store-badge-text"><small>Get it on</small><strong>Google Play</strong></div>
+      </a>
+    </div>
+    <p class="hero-note">Free forever · No ads · Premium optional</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GALAXY DEMO -->
+<section id="galaxy-demo">
+  <div class="container">
+    <span class="slabel" style="color:var(--purple);text-align:center;display:block">YOUR GALAXY</span>
+    <h2 class="stitle" style="text-align:center">EVERY SESSION LEAVES A MARK</h2>
+    <p class="ssub" style="margin:0 auto;text-align:center">This is what a real Focus Universe galaxy looks like — each star earned through a completed focus session.</p>
+    <div class="galaxy-wrap">
+      <canvas id="galaxy-canvas" height="420"></canvas>
+      <span class="galaxy-label">LIVE DEMO</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="how-hdr">
+      <span class="slabel" style="color:var(--teal);display:block;text-align:center">HOW IT WORKS</span>
+      <h2 class="stitle" style="text-align:center">FOCUS. EARN. GROW.</h2>
+      <p class="ssub" style="margin:0 auto;text-align:center">Three simple steps.</p>
+    </div>
+    <div class="how-steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon"><canvas id="how-icon-0" width="44" height="44" style="image-rendering:pixelated"></canvas></div>
+        <h3>START A SESSION</h3>
+        <p>Set your focus timer. Lock in. No distractions, no interruptions — just you and your work.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon"><canvas id="how-icon-1" width="44" height="44" style="image-rendering:pixelated"></canvas></div>
+        <h3>EARN A STAR</h3>
+        <p>Complete the session and a new pixel star appears in your galaxy. Different sessions unlock different types.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon"><canvas id="how-icon-2" width="44" height="44" style="image-rendering:pixelated"></canvas></div>
+        <h3>BUILD YOUR GALAXY</h3>
+        <p>Watch your personal universe grow session by session. Your galaxy is proof of your dedication.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon"><canvas id="how-icon-3" width="44" height="44" style="image-rendering:pixelated"></canvas></div>
+        <h3>UNLOCK ACHIEVEMENTS</h3>
+        <p>Earn badges for streaks, deep focus, early mornings, marathons and more. 18 achievements to collect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="feat-hdr">
+      <span class="slabel" style="color:var(--purple)">FEATURES</span>
+      <h2 class="stitle">EVERYTHING YOU NEED<br>TO STAY IN FOCUS</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon"><canvas id="fi-0" width="40" height="40" style="image-rendering:pixelated"></canvas></div>
+        <div>
+          <h3 style="color:var(--teal)">POMODORO TIMER</h3>
+          <p>Customizable focus sessions with automatic break reminders. Work smarter, not harder.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><canvas id="fi-1" width="40" height="40" style="image-rendering:pixelated"></canvas></div>
+        <div>
+          <h3 style="color:var(--purple)">LIVING GALAXY</h3>
+          <p>Every completed session adds a pixel star to your galaxy. Watch it evolve into a breathtaking universe.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><canvas id="fi-2" width="40" height="40" style="image-rendering:pixelated"></canvas></div>
+        <div>
+          <h3 style="color:var(--gold)">DAILY MISSIONS</h3>
+          <p>3 fresh missions every day — complete a session, go long, be an early bird, keep your streak. Finish them all for bonus XP.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><canvas id="fi-3" width="40" height="40" style="image-rendering:pixelated"></canvas></div>
+        <div>
+          <h3 style="color:var(--blue)">STATS & INSIGHTS</h3>
+          <p>Track your focus streaks, total hours, and session history with beautiful visualizations.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><canvas id="fi-4" width="40" height="40" style="image-rendering:pixelated"></canvas></div>
+        <div>
+          <h3 style="color:var(--amber)">SCHEDULED EVENTS <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;background:rgba(255,170,0,.2);padding:2px 6px;font-weight:700">PRO</span></h3>
+          <p>Plan your focus sessions in advance. Scheduled events earn special event stars.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><canvas id="fi-5" width="40" height="40" style="image-rendering:pixelated"></canvas></div>
+        <div>
+          <h3 style="color:var(--pink)">ACHIEVEMENTS</h3>
+          <p>18 pixel art badges to unlock — from your first session to 30-day streaks and marathon sessions.</p>
+        </div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><canvas id="fi-6" width="40" height="40" style="image-rendering:pixelated"></canvas></div>
+        <div>
+          <h3 style="color:#FF5370">APP BLOCKER <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;background:rgba(255,83,112,.2);padding:2px 6px;font-weight:700">PRO</span></h3>
+          <p>Block distracting apps during your focus sessions. Whitelist what you need, block everything else. Free: up to 3 apps. Premium: unlimited.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STAR TYPES -->
+<section id="stars">
+  <div class="container">
+    <div class="stars-hdr">
+      <span class="slabel" style="color:var(--gold);display:block;text-align:center">PIXEL STAR TYPES</span>
+      <h2 class="stitle" style="text-align:center">14 TYPES OF STARS TO EARN</h2>
+      <p class="ssub" style="margin:0 auto;text-align:center">Permanent stars, premium rarities, and 7 seasonal stars tied to real-world events. Each sprite drawn pixel by pixel.</p>
+    </div>
+    <div class="stars-flex" id="stars-showcase"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="container">
+    <div class="ach-hdr">
+      <span class="slabel" style="color:var(--pink)">ACHIEVEMENTS</span>
+      <h2 class="stitle">18 BADGES TO EARN</h2>
+      <p class="ssub" style="margin:0 auto">From your first session to 30-day streaks — every milestone is celebrated.</p>
+    </div>
+    <div class="ach-grid" id="ach-grid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="price-hdr">
+      <span class="slabel" style="color:var(--amber);display:block;text-align:center">PREMIUM</span>
+      <h2 class="stitle" style="text-align:center">UNLOCK YOUR FULL<br>GALAXY POTENTIAL</h2>
+      <p class="ssub" style="margin:0 auto;text-align:center">The free tier is powerful. Premium is limitless.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card" style="border-color:rgba(157,78,221,.5);background:rgba(157,78,221,.06)">
+        <p class="price-label" style="color:var(--purple)">MONTHLY</p>
+        <p class="price-amt">$2.99</p>
+        <p class="price-sub">per month · Cancel anytime</p>
+        <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app" class="price-btn" data-store="play" style="background:var(--purple)">GET STARTED</a>
+      </div>
+      <div class="price-card hi" style="border-color:var(--teal);background:rgba(0,229,204,.07)">
+        <div class="price-badge" style="background:var(--teal)">BEST VALUE</div>
+        <p class="price-label" style="color:var(--teal)">ANNUAL</p>
+        <p class="price-amt">$17.99</p>
+        <p class="price-sub">$1.50/month · Save 50%</p>
+        <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app" class="price-btn" data-store="play" style="background:var(--teal)">GET STARTED</a>
+      </div>
+      <div class="price-card" style="border-color:rgba(255,170,0,.5);background:rgba(255,170,0,.06)">
+        <div class="price-badge" style="background:var(--amber)">FOREVER</div>
+        <p class="price-label" style="color:var(--amber)">LIFETIME</p>
+        <p class="price-amt">$39.99</p>
+        <p class="price-sub">One-time · Own it forever</p>
+        <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app" class="price-btn" data-store="play" style="background:var(--amber)">GET STARTED</a>
+      </div>
+    </div>
+    <div class="prem-feats" id="prem-feats"></div>
+    <p style="text-align:center;margin-top:22px;font-size:11px;color:rgba(255,255,255,.25)">Restore purchase &nbsp;·&nbsp; <a href="privacy.html" style="color:rgba(255,255,255,.25);text-decoration:underline">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html" style="color:rgba(255,255,255,.25);text-decoration:underline">Terms of Service</a></p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <span class="slabel" style="color:var(--teal);display:block;text-align:center">START TODAY</span>
+    <h2 class="stitle" style="text-align:center">YOUR GALAXY<br>IS WAITING</h2>
+    <p class="ssub" style="text-align:center;margin:0 auto 40px">Every expert was once a beginner. Every galaxy starts with a single star. Download Focus Universe free.</p>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
+      <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app" class="btn-primary">⬇ DOWNLOAD FREE</a>
+      <a href="#pricing" class="btn-secondary">SEE PREMIUM</a>
+    </div>
+    <div class="store-badges" style="margin-top:28px">
+      <a href="#" class="store-badge" aria-disabled="true" style="opacity:.6;pointer-events:none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div class="store-badge-text"><small>Coming soon on the</small><strong>App Store</strong></div>
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app" class="store-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.64.22.99.14l13.23-7.52-2.9-2.93-11.32 10.31zm-1.67-20.1C1.2 4.04 1 4.54 1 5.14v13.72c0 .6.2 1.1.51 1.48l.08.07 7.69-7.74v-.18L1.59 3.59l-.08.07zM20.49 10.61l-2.85-1.62-3.19 3.22 3.19 3.22 2.88-1.63c.82-.47.82-1.72-.03-2.19zM4.17.38L17.4 7.9l-2.9 2.93L3.18.52c.35-.08.7-.03.99.14z"/></svg>
+        <div class="store-badge-text"><small>Get it on</small><strong>Google Play</strong></div>
+      </a>
+    </div>
+    <div class="cta-stats">
+      <div class="cta-stat" style="text-align:center"><p style="color:var(--teal)">14</p><p>star types</p></div>
+      <div class="cta-stat" style="text-align:center"><p style="color:var(--purple)">18</p><p>achievements</p></div>
+      <div class="cta-stat" style="text-align:center"><p style="color:var(--amber)">∞</p><p>potential</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p class="foot-logo">FOCUS UNIVERSE</p>
+    <div class="foot-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="mailto:info@focus-universe.com">Support</a>
+      <a href="https://play.google.com/store/apps/details?id=com.focusuniverse.app">Google Play</a>
+      <a href="../">Moonemy Labs</a>
+    </div>
+    <p>© 2026 Moonemy Labs. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// PIXEL ART ENGINE — ported directly from Flutter source
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── Color helpers ──────────────────────────────────────────────────────────
+function hexToRgb(h){
+  const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);
+  return [r,g,b];
+}
+function lerpC(a,b,t){
+  return [Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t)];
+}
+function toRgba(rgb,a){return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a})`}
+function toRgb(rgb){return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`}
+
+// ── STAR PIXEL GRIDS (13×13) — exact copy from pixel_star_painter.dart ────
+const GRIDS = {
+  normal:[
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+    [0,0,0,0,0,2,1,2,0,0,0,0,0],
+    [0,0,0,0,0,1,1,1,0,0,0,0,0],
+    [1,1,1,1,2,2,4,2,2,1,1,1,1],
+    [0,1,1,1,2,4,4,4,2,1,1,1,0],
+    [0,0,1,1,1,2,4,2,1,1,1,0,0],
+    [0,0,0,1,1,1,1,1,1,1,0,0,0],
+    [0,0,0,0,1,1,1,1,1,0,0,0,0],
+    [0,0,0,3,0,1,1,1,0,3,0,0,0],
+    [0,0,3,0,0,0,1,0,0,0,3,0,0],
+    [0,3,0,0,0,0,0,0,0,0,0,3,0],
+    [3,0,0,0,0,0,0,0,0,0,0,0,3],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  supernova:[
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+    [0,0,0,0,0,2,1,2,0,0,0,0,0],
+    [0,5,0,0,0,1,1,1,0,0,0,5,0],
+    [0,0,5,1,2,2,4,2,2,1,5,0,0],
+    [0,0,1,1,2,4,4,4,2,1,1,0,0],
+    [1,2,1,2,4,4,4,4,4,2,1,2,1],
+    [0,0,1,1,2,4,4,4,2,1,1,0,0],
+    [0,0,5,1,2,2,4,2,2,1,5,0,0],
+    [0,5,0,0,0,1,1,1,0,0,0,5,0],
+    [0,0,0,0,0,2,1,2,0,0,0,0,0],
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  event:[
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+    [0,0,0,0,0,2,2,1,0,0,0,0,0],
+    [0,0,0,0,2,2,4,1,1,0,0,0,0],
+    [0,0,0,2,2,4,4,1,1,1,0,0,0],
+    [0,0,2,2,4,4,4,1,1,1,1,0,0],
+    [0,2,2,4,4,4,4,1,1,1,1,1,0],
+    [2,2,4,4,4,4,4,1,1,1,1,3,3],
+    [0,1,1,3,4,4,4,4,1,3,3,3,0],
+    [0,0,1,1,3,4,4,3,3,3,3,0,0],
+    [0,0,0,1,1,3,3,3,3,3,0,0,0],
+    [0,0,0,0,1,3,3,3,3,0,0,0,0],
+    [0,0,0,0,0,1,3,3,0,0,0,0,0],
+    [0,0,0,0,0,0,3,0,0,0,0,0,0],
+  ],
+  nebula:[
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+    [0,0,0,0,2,2,1,2,2,0,0,0,0],
+    [0,0,5,0,2,4,2,4,2,0,5,0,0],
+    [0,5,0,2,2,4,4,4,2,2,0,5,0],
+    [5,0,2,4,4,2,4,2,4,4,2,0,5],
+    [0,2,2,4,2,2,4,2,2,4,2,2,0],
+    [4,1,4,2,2,4,4,4,2,2,4,1,4],
+    [0,2,2,4,2,2,4,2,2,4,2,2,0],
+    [5,0,2,4,4,2,4,2,4,4,2,0,5],
+    [0,5,0,2,2,4,4,4,2,2,0,5,0],
+    [0,0,5,0,2,4,2,4,2,0,5,0,0],
+    [0,0,0,0,2,2,1,2,2,0,0,0,0],
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+  ],
+  constellation:[
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+    [0,0,0,0,0,2,1,2,0,0,0,0,0],
+    [0,0,0,0,2,1,1,1,2,0,0,0,0],
+    [0,0,0,1,1,1,4,1,1,1,0,0,0],
+    [0,0,1,1,1,4,4,4,1,1,1,0,0],
+    [0,1,1,1,4,4,4,4,4,1,1,1,0],
+    [1,1,1,4,4,4,4,4,4,4,1,1,1],
+    [0,1,1,1,4,4,4,4,4,1,1,1,0],
+    [0,0,1,1,1,4,4,4,1,1,1,0,0],
+    [0,0,0,1,1,1,4,1,1,1,0,0,0],
+    [0,0,0,0,2,1,1,1,2,0,0,0,0],
+    [0,0,0,0,0,2,1,2,0,0,0,0,0],
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+  ],
+  cosmic:[
+    [0,0,0,0,0,1,0,0,0,0,0,0,0],
+    [0,0,0,0,1,1,0,0,0,0,0,0,0],
+    [0,0,0,1,1,2,0,0,0,0,0,1,0],
+    [0,0,1,1,2,2,4,0,0,0,1,1,0],
+    [0,1,1,2,4,4,4,2,0,0,1,0,0],
+    [0,0,2,4,4,4,4,4,2,0,0,0,0],
+    [0,0,2,4,4,4,4,4,2,1,1,0,0],
+    [0,0,0,0,2,4,4,4,2,1,1,0,0],
+    [0,1,1,0,0,2,4,2,1,2,0,0,0],
+    [0,1,1,0,0,0,2,1,1,0,0,0,0],
+    [0,0,1,0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  legendary:[
+    [0,0,4,0,0,0,4,0,0,0,4,0,0],
+    [0,0,1,0,0,2,1,2,0,0,1,0,0],
+    [0,2,1,2,2,2,4,2,2,2,1,2,0],
+    [2,2,1,2,2,2,4,2,2,2,1,2,2],
+    [1,1,1,1,1,1,4,1,1,1,1,1,1],
+    [1,1,1,1,1,2,4,2,1,1,1,1,1],
+    [1,1,1,1,1,1,4,1,1,1,1,1,1],
+    [2,2,2,2,2,2,4,2,2,2,2,2,2],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,0,4,0,1,0,4,0,1,0,4,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [3,3,3,3,3,3,3,3,3,3,3,3,3],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  aurora:[
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,2,0,2,0,4,0,2,0,2,0,0],
+    [0,2,2,2,4,2,4,2,4,2,2,2,0],
+    [2,2,4,4,4,4,4,4,4,4,4,2,2],
+    [1,4,4,4,4,4,4,4,4,4,4,4,1],
+    [1,1,4,4,2,4,4,4,2,4,4,1,1],
+    [2,1,1,4,4,2,4,2,4,4,1,1,2],
+    [1,1,4,4,2,4,4,4,2,4,4,1,1],
+    [1,4,4,4,4,4,4,4,4,4,4,4,1],
+    [2,2,4,4,4,4,4,4,4,4,4,2,2],
+    [0,2,2,2,4,2,4,2,4,2,2,2,0],
+    [0,0,2,0,2,0,4,0,2,0,2,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  sakura:[
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+    [0,0,0,0,2,1,4,1,2,0,0,0,0],
+    [0,0,0,2,1,4,4,4,1,2,0,0,0],
+    [0,0,2,1,4,4,4,4,4,1,2,0,0],
+    [0,2,1,4,4,4,4,4,4,4,1,2,0],
+    [2,1,4,4,4,4,4,4,4,4,4,1,2],
+    [4,4,4,4,4,4,4,4,4,4,4,4,4],
+    [2,1,4,4,4,4,4,4,4,4,4,1,2],
+    [0,2,1,4,4,4,4,4,4,4,1,2,0],
+    [0,0,2,1,4,4,4,4,4,1,2,0,0],
+    [0,0,0,2,1,4,4,4,1,2,0,0,0],
+    [0,0,0,0,2,1,4,1,2,0,0,0,0],
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+  ],
+  solar:[
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+    [0,0,4,0,0,0,1,0,0,0,4,0,0],
+    [0,0,0,1,0,2,2,2,0,1,0,0,0],
+    [0,0,0,0,2,2,4,2,2,0,0,0,0],
+    [0,0,0,2,2,4,4,4,2,2,0,0,0],
+    [0,0,2,2,4,4,4,4,4,2,2,0,0],
+    [4,1,2,4,4,4,4,4,4,4,2,1,4],
+    [0,0,2,2,4,4,4,4,4,2,2,0,0],
+    [0,0,0,2,2,4,4,4,2,2,0,0,0],
+    [0,0,0,0,2,2,4,2,2,0,0,0,0],
+    [0,0,0,1,0,2,2,2,0,1,0,0,0],
+    [0,0,4,0,0,0,1,0,0,0,4,0,0],
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+  ],
+  phantom:[
+    [0,0,0,0,2,2,4,2,2,0,0,0,0],
+    [0,0,0,2,2,4,4,4,2,2,0,0,0],
+    [0,0,2,2,4,4,4,4,4,2,2,0,0],
+    [0,2,2,4,4,4,4,4,4,4,2,2,0],
+    [2,2,4,4,4,4,4,4,4,4,4,2,2],
+    [1,1,4,4,4,4,4,4,4,4,4,1,1],
+    [1,1,4,0,0,4,4,4,0,0,4,1,1],
+    [1,1,4,0,0,4,4,4,0,0,4,1,1],
+    [1,1,4,4,4,4,4,4,4,4,4,1,1],
+    [1,1,1,0,1,1,1,1,1,0,1,1,1],
+    [1,0,0,0,0,1,1,1,0,0,0,0,1],
+    [0,0,0,0,0,0,1,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  comet:[
+    [0,0,0,0,0,0,0,0,0,0,0,4,0],
+    [0,0,0,0,0,0,0,0,0,0,2,1,2],
+    [0,0,0,0,0,0,0,0,0,2,1,4,1],
+    [0,0,0,3,0,0,0,0,2,1,4,4,1],
+    [0,0,3,0,0,0,0,2,1,4,4,4,1],
+    [0,3,0,0,0,0,2,1,4,4,4,2,0],
+    [3,0,0,0,0,2,1,4,4,4,2,0,0],
+    [0,3,0,0,2,1,4,4,4,2,0,0,0],
+    [0,0,3,2,1,4,4,4,2,0,0,0,0],
+    [0,0,2,1,4,4,4,2,0,0,0,0,0],
+    [0,2,1,4,4,2,0,0,0,0,0,0,0],
+    [2,1,4,2,0,0,0,0,0,0,0,0,0],
+    [1,2,0,0,0,0,0,0,0,0,0,0,0],
+  ],
+  nova:[
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+    [0,0,0,0,0,1,1,1,0,0,0,0,0],
+    [0,0,2,0,0,2,4,2,0,0,2,0,0],
+    [0,0,0,2,0,1,1,1,0,2,0,0,0],
+    [0,0,0,0,2,2,4,2,2,0,0,0,0],
+    [2,1,2,1,2,4,4,4,2,1,2,1,2],
+    [4,1,4,1,4,4,4,4,4,1,4,1,4],
+    [2,1,2,1,2,4,4,4,2,1,2,1,2],
+    [0,0,0,0,2,2,4,2,2,0,0,0,0],
+    [0,0,0,2,0,1,1,1,0,2,0,0,0],
+    [0,0,2,0,0,2,4,2,0,0,2,0,0],
+    [0,0,0,0,0,1,1,1,0,0,0,0,0],
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+  ],
+  crystal:[
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+    [0,0,0,0,1,2,4,2,1,0,0,0,0],
+    [0,0,0,0,2,4,4,4,2,0,0,0,0],
+    [0,0,1,2,4,4,4,4,4,2,1,0,0],
+    [0,2,2,4,4,4,2,4,4,4,2,2,0],
+    [4,2,4,4,4,2,4,2,4,4,4,2,4],
+    [0,2,2,4,4,4,2,4,4,4,2,2,0],
+    [0,0,1,2,4,4,4,4,4,2,1,0,0],
+    [0,0,0,0,2,4,4,4,2,0,0,0,0],
+    [0,0,0,0,1,2,4,2,1,0,0,0,0],
+    [0,0,0,0,0,2,4,2,0,0,0,0,0],
+    [0,0,0,0,0,0,4,0,0,0,0,0,0],
+  ],
+};
+
+// ── Draw pixel star on canvas ──────────────────────────────────────────────
+// Exact port of PixelStarPainter.paint()
+function drawPixelStar(ctx, type, x, y, size, hexColor, glowAlpha) {
+  const grid = GRIDS[type];
+  if (!grid) return;
+  const GS = 13;
+  const px = size / GS;
+  const base = hexToRgb(hexColor);
+  const white = [255,255,255];
+  const black = [0,0,0];
+  // palette: 0=transparent,1=main,2=highlight(+50%white),3=shadow(+50%black),4=white,5=darkRim(+70%black)
+  const pal = [
+    null,
+    toRgb(base),
+    toRgb(lerpC(base,white,0.50)),
+    toRgb(lerpC(base,black,0.50)),
+    '#FFFFFF',
+    toRgb(lerpC(base,black,0.70)),
+  ];
+
+  // Glow
+  if (glowAlpha > 0) {
+    const gR = size * 0.75;
+    const grad = ctx.createRadialGradient(x+size/2,y+size/2,0,x+size/2,y+size/2,gR);
+    grad.addColorStop(0, toRgba(base, 0.55*glowAlpha));
+    grad.addColorStop(1, 'transparent');
+    ctx.save();
+    ctx.fillStyle = grad;
+    ctx.fillRect(x+size/2-gR, y+size/2-gR, gR*2, gR*2);
+    ctx.restore();
+  }
+
+  // Pixels — no anti-alias
+  ctx.imageSmoothingEnabled = false;
+  for (let row=0; row<GS; row++) {
+    for (let col=0; col<GS; col++) {
+      const idx = grid[row][col];
+      if (idx === 0) continue;
+      ctx.fillStyle = pal[Math.min(idx, pal.length-1)];
+      ctx.fillRect(Math.floor(x + col*px), Math.floor(y + row*px), Math.ceil(px), Math.ceil(px));
+    }
+  }
+}
+
+// ── PIXEL ICON data [col,row,shade] — from pixel_icons.dart ───────────────
+const ICONS = {
+  clock:[
+    [3,0,0],[4,0,0],[5,0,0],[6,0,0],[7,0,0],[8,0,0],[2,1,0],[9,1,0],
+    [1,2,0],[10,2,0],[0,3,0],[11,3,0],[0,4,0],[11,4,0],[0,5,0],[11,5,0],
+    [0,6,0],[11,6,0],[0,7,0],[11,7,0],[1,8,0],[10,8,0],[2,9,0],[9,9,0],
+    [3,10,0],[4,10,0],[5,10,0],[6,10,0],[7,10,0],[8,10,0],
+    [5,1,0],[6,1,0],[1,5,0],[1,6,0],[10,5,0],[10,6,0],[5,9,0],[6,9,0],
+    [5,5,0],[5,4,0],[4,4,0],[4,3,0],[3,3,0],[6,5,0],[7,5,0],[8,5,0],
+    [3,1,1],[4,1,1],[5,1,1],[6,1,1],[7,1,1],[8,1,1],
+    [2,2,1],[3,2,1],[4,2,1],[5,2,1],[6,2,1],[7,2,1],[8,2,1],[9,2,1],
+    [1,3,1],[2,3,1],[5,3,1],[6,3,1],[7,3,1],[8,3,1],[9,3,1],[10,3,1],
+    [1,4,1],[2,4,1],[3,4,1],[6,4,1],[7,4,1],[8,4,1],[9,4,1],[10,4,1],
+    [1,5,1],[2,5,1],[3,5,1],[4,5,1],[9,5,1],[10,5,1],
+    [1,6,1],[2,6,1],[3,6,1],[4,6,1],[5,6,1],[6,6,1],[7,6,1],[8,6,1],[9,6,1],[10,6,1],
+    [1,7,1],[2,7,1],[3,7,1],[4,7,1],[5,7,1],[6,7,1],[7,7,1],[8,7,1],[9,7,1],[10,7,1],
+    [2,8,1],[3,8,1],[4,8,1],[5,8,1],[6,8,1],[7,8,1],[8,8,1],[9,8,1],
+    [3,9,1],[4,9,1],[7,9,1],[8,9,1],[5,5,1],[6,5,1],
+    [3,1,2],[4,1,2],[5,1,2],[2,2,2],[3,2,2],[1,3,2],[2,3,2],[1,4,2],
+  ],
+  star:[
+    [5,0,0],[6,0,0],[4,2,0],[7,2,0],
+    [0,3,0],[1,3,0],[2,3,0],[3,3,0],[8,3,0],[9,3,0],[10,3,0],[11,3,0],
+    [0,4,0],[11,4,0],[0,5,0],[11,5,0],
+    [1,6,0],[2,6,0],[3,6,0],[8,6,0],[9,6,0],[10,6,0],
+    [0,7,0],[1,7,0],[11,7,0],[10,7,0],[0,8,0],[11,8,0],
+    [4,8,0],[7,8,0],[4,9,0],[7,9,0],[5,11,0],[6,11,0],
+    [5,1,1],[6,1,1],[5,2,1],[6,2,1],[4,3,1],[5,3,1],[6,3,1],[7,3,1],
+    [1,4,1],[2,4,1],[3,4,1],[4,4,1],[5,4,1],[6,4,1],[7,4,1],[8,4,1],[9,4,1],[10,4,1],
+    [1,5,1],[2,5,1],[3,5,1],[4,5,1],[5,5,1],[6,5,1],[7,5,1],[8,5,1],[9,5,1],[10,5,1],
+    [4,6,1],[5,6,1],[6,6,1],[7,6,1],
+    [2,7,1],[3,7,1],[4,7,1],[5,7,1],[6,7,1],[7,7,1],[8,7,1],[9,7,1],
+    [1,8,1],[2,8,1],[3,8,1],[5,8,1],[6,8,1],[8,8,1],[9,8,1],[10,8,1],
+    [5,9,1],[6,9,1],[5,10,1],[6,10,1],[5,11,1],[6,11,1],
+    [5,1,2],[5,2,2],[4,3,2],[5,3,2],[1,4,2],[2,4,2],[3,4,2],[4,4,2],[1,5,2],
+  ],
+  target:[
+    [4,0,0],[5,0,0],[6,0,0],[7,0,0],[2,1,0],[3,1,0],[8,1,0],[9,1,0],
+    [1,2,0],[10,2,0],[1,3,0],[10,3,0],[0,4,0],[11,4,0],[0,5,0],[11,5,0],
+    [0,6,0],[11,6,0],[0,7,0],[11,7,0],[1,8,0],[10,8,0],[1,9,0],[10,9,0],
+    [2,10,0],[3,10,0],[8,10,0],[9,10,0],[4,11,0],[5,11,0],[6,11,0],[7,11,0],
+    [4,3,0],[5,3,0],[6,3,0],[7,3,0],[3,4,0],[8,4,0],[3,5,0],[8,5,0],
+    [3,6,0],[8,6,0],[3,7,0],[8,7,0],[4,8,0],[5,8,0],[6,8,0],[7,8,0],
+    [4,1,1],[5,1,1],[6,1,1],[7,1,1],
+    [2,2,1],[3,2,1],[4,2,1],[5,2,1],[6,2,1],[7,2,1],[8,2,1],[9,2,1],
+    [2,3,1],[3,3,1],[8,3,1],[9,3,1],[1,4,1],[2,4,1],[9,4,1],[10,4,1],
+    [1,5,1],[2,5,1],[9,5,1],[10,5,1],[1,6,1],[2,6,1],[9,6,1],[10,6,1],
+    [1,7,1],[2,7,1],[9,7,1],[10,7,1],[2,8,1],[3,8,1],[8,8,1],[9,8,1],
+    [2,9,1],[3,9,1],[4,9,1],[5,9,1],[6,9,1],[7,9,1],[8,9,1],[9,9,1],
+    [4,10,1],[5,10,1],[6,10,1],[7,10,1],
+    [4,4,1],[5,4,1],[6,4,1],[7,4,1],[4,5,1],[7,5,1],[4,6,1],[7,6,1],
+    [4,7,1],[5,7,1],[6,7,1],[7,7,1],[5,5,1],[6,5,1],[5,6,1],[6,6,1],
+    [5,5,2],[6,5,2],[4,1,2],[5,1,2],[2,2,2],[3,2,2],
+  ],
+  chart:[
+    [0,0,0],[0,1,0],[0,2,0],[0,3,0],[0,4,0],[0,5,0],[0,6,0],[0,7,0],[0,8,0],[0,9,0],
+    [0,10,0],[1,10,0],[2,10,0],[3,10,0],[4,10,0],[5,10,0],[6,10,0],[7,10,0],[8,10,0],[9,10,0],[10,10,0],[11,10,0],
+    [2,1,0],[3,1,0],[2,2,0],[2,3,0],[2,4,0],[2,5,0],[2,6,0],[2,7,0],[2,8,0],
+    [4,2,0],[4,3,0],[4,4,0],[4,5,0],[4,6,0],[4,7,0],[4,8,0],[3,1,0],
+    [5,4,0],[6,4,0],[5,5,0],[5,6,0],[5,7,0],[5,8,0],[5,9,0],
+    [7,5,0],[7,6,0],[7,7,0],[7,8,0],[7,9,0],[6,4,0],
+    [8,6,0],[9,6,0],[8,7,0],[8,8,0],[8,9,0],[10,7,0],[10,8,0],[10,9,0],[9,6,0],
+    [3,2,1],[3,3,1],[3,4,1],[3,5,1],[3,6,1],[3,7,1],[3,8,1],[3,9,1],
+    [6,5,1],[6,6,1],[6,7,1],[6,8,1],[6,9,1],
+    [9,7,1],[9,8,1],[9,9,1],
+    [3,2,2],[6,5,2],[9,7,2],
+  ],
+  calendar:[
+    [1,0,0],[4,0,0],[5,0,0],[7,0,0],[8,0,0],[10,0,0],
+    [0,1,0],[2,1,0],[3,1,0],[6,1,0],[9,1,0],[11,1,0],
+    [0,2,0],[1,2,0],[2,2,0],[3,2,0],[4,2,0],[5,2,0],[6,2,0],[7,2,0],[8,2,0],[9,2,0],[10,2,0],[11,2,0],
+    [0,3,0],[11,3,0],[0,4,0],[11,4,0],[0,5,0],[11,5,0],
+    [0,6,0],[11,6,0],[0,7,0],[11,7,0],[0,8,0],[11,8,0],[0,9,0],[11,9,0],
+    [0,10,0],[1,10,0],[2,10,0],[3,10,0],[4,10,0],[5,10,0],[6,10,0],[7,10,0],[8,10,0],[9,10,0],[10,10,0],[11,10,0],
+    [1,1,1],[4,1,1],[5,1,1],[7,1,1],[8,1,1],[10,1,1],
+    [1,3,1],[2,3,1],[3,3,1],[4,3,1],[5,3,1],[6,3,1],[7,3,1],[8,3,1],[9,3,1],[10,3,1],
+    [1,4,1],[3,4,1],[5,4,1],[7,4,1],[9,4,1],[10,4,1],
+    [1,5,1],[2,5,1],[3,5,1],[4,5,1],[5,5,1],[6,5,1],[7,5,1],[8,5,1],[9,5,1],[10,5,1],
+    [1,6,1],[3,6,1],[5,6,1],[7,6,1],[9,6,1],[10,6,1],
+    [1,7,1],[2,7,1],[3,7,1],[4,7,1],[5,7,1],[6,7,1],[7,7,1],[8,7,1],[9,7,1],[10,7,1],
+    [1,8,1],[3,8,1],[5,8,1],[7,8,1],[9,8,1],[10,8,1],
+    [1,9,1],[2,9,1],[3,9,1],[4,9,1],[5,9,1],[6,9,1],[7,9,1],[8,9,1],[9,9,1],[10,9,1],
+    [1,1,2],[4,1,2],[7,1,2],[10,1,2],[1,3,2],[2,3,2],[3,3,2],
+  ],
+  trophy:[
+    [1,0,0],[2,0,0],[3,0,0],[4,0,0],[5,0,0],[6,0,0],[7,0,0],[8,0,0],[9,0,0],[10,0,0],
+    [0,1,0],[11,1,0],[0,2,0],[11,2,0],[0,3,0],[11,3,0],
+    [1,4,0],[10,4,0],[2,5,0],[9,5,0],[3,6,0],[8,6,0],[4,7,0],[7,7,0],
+    [4,8,0],[5,8,0],[6,8,0],[7,8,0],
+    [3,9,0],[4,9,0],[7,9,0],[8,9,0],[2,10,0],[3,10,0],[8,10,0],[9,10,0],
+    [1,11,0],[2,11,0],[3,11,0],[4,11,0],[5,11,0],[6,11,0],[7,11,0],[8,11,0],[9,11,0],[10,11,0],
+    [2,1,1],[3,1,1],[4,1,1],[5,1,1],[6,1,1],[7,1,1],[8,1,1],[9,1,1],[10,1,1],
+    [1,2,1],[2,2,1],[3,2,1],[4,2,1],[5,2,1],[6,2,1],[7,2,1],[8,2,1],[9,2,1],[10,2,1],
+    [1,3,1],[2,3,1],[3,3,1],[4,3,1],[5,3,1],[6,3,1],[7,3,1],[8,3,1],[9,3,1],[10,3,1],
+    [2,4,1],[3,4,1],[4,4,1],[5,4,1],[6,4,1],[7,4,1],[8,4,1],[9,4,1],
+    [3,5,1],[4,5,1],[5,5,1],[6,5,1],[7,5,1],[8,5,1],
+    [4,6,1],[5,6,1],[6,6,1],[7,6,1],[5,7,1],[6,7,1],
+    [5,9,1],[6,9,1],[4,10,1],[5,10,1],[6,10,1],[7,10,1],
+    [3,11,1],[4,11,1],[5,11,1],[6,11,1],[7,11,1],[8,11,1],
+    [2,1,2],[1,2,2],[1,3,2],[2,4,2],[3,5,2],[4,6,2],
+  ],
+  crown:[
+    [0,0,0],[0,1,0],[0,2,0],[0,3,0],[0,4,0],[1,1,0],[1,4,0],
+    [5,0,0],[6,0,0],[4,1,0],[7,1,0],[4,2,0],[7,2,0],[4,3,0],[7,3,0],[4,4,0],[7,4,0],
+    [11,0,0],[11,1,0],[11,2,0],[11,3,0],[11,4,0],[10,1,0],[10,4,0],
+    [2,3,0],[3,3,0],[8,3,0],[9,3,0],[2,4,0],[3,4,0],[8,4,0],[9,4,0],
+    [0,5,0],[1,5,0],[2,5,0],[3,5,0],[4,5,0],[5,5,0],[6,5,0],[7,5,0],[8,5,0],[9,5,0],[10,5,0],[11,5,0],
+    [0,6,0],[11,6,0],[0,7,0],[11,7,0],[0,8,0],[11,8,0],
+    [0,9,0],[1,9,0],[2,9,0],[3,9,0],[4,9,0],[5,9,0],[6,9,0],[7,9,0],[8,9,0],[9,9,0],[10,9,0],[11,9,0],
+    [1,2,1],[1,3,1],[5,1,1],[6,1,1],[5,2,1],[6,2,1],[5,3,1],[6,3,1],
+    [10,2,1],[10,3,1],[2,4,1],[3,4,1],[8,4,1],[9,4,1],[1,4,1],[10,4,1],
+    [1,6,1],[2,6,1],[3,6,1],[4,6,1],[5,6,1],[6,6,1],[7,6,1],[8,6,1],[9,6,1],[10,6,1],
+    [1,7,1],[3,7,1],[5,7,1],[7,7,1],[9,7,1],[10,7,1],
+    [1,8,1],[2,8,1],[3,8,1],[4,8,1],[5,8,1],[6,8,1],[7,8,1],[8,8,1],[9,8,1],[10,8,1],
+    [1,2,2],[1,3,2],[5,1,2],[6,1,2],[5,2,2],[10,2,2],[10,3,2],
+    [2,7,2],[6,7,2],[8,7,2],[1,6,2],[2,6,2],[3,6,2],
+  ],
+  bolt:[
+    [6,0,0],[7,0,0],[8,0,0],[9,0,0],[10,0,0],[5,1,0],[10,1,0],[4,2,0],[9,2,0],
+    [3,3,0],[8,3,0],[0,4,0],[1,4,0],[2,4,0],[7,4,0],[0,5,0],[6,5,0],
+    [2,6,0],[6,6,0],[1,7,0],[5,7,0],[0,8,0],[4,8,0],[0,9,0],[3,9,0],[1,10,0],[2,10,0],
+    [7,1,1],[8,1,1],[9,1,1],[5,2,1],[6,2,1],[7,2,1],[8,2,1],
+    [4,3,1],[5,3,1],[6,3,1],[7,3,1],[3,4,1],[4,4,1],[5,4,1],[6,4,1],
+    [1,5,1],[2,5,1],[3,5,1],[4,5,1],[5,5,1],
+    [3,6,1],[4,6,1],[5,6,1],[2,7,1],[3,7,1],[4,7,1],[1,8,1],[2,8,1],[3,8,1],[1,9,1],[2,9,1],
+    [7,1,2],[8,1,2],[5,2,2],[6,2,2],[4,3,2],[5,3,2],[3,4,2],[4,4,2],
+  ],
+  infinite:[
+    [2,2,0],[3,2,0],[1,3,0],[4,3,0],[0,4,0],[5,4,0],[0,5,0],[0,6,0],[0,7,0],
+    [1,8,0],[4,8,0],[2,9,0],[3,9,0],[5,5,0],[5,6,0],[5,7,0],[4,7,0],
+    [8,2,0],[9,2,0],[7,3,0],[10,3,0],[6,4,0],[11,4,0],[11,5,0],[11,6,0],[11,7,0],
+    [7,8,0],[10,8,0],[8,9,0],[9,9,0],[6,5,0],[6,6,0],[6,7,0],[7,7,0],
+    [2,3,1],[3,3,1],[1,4,1],[2,4,1],[3,4,1],[4,4,1],
+    [1,5,1],[2,5,1],[3,5,1],[1,6,1],[2,6,1],[3,6,1],
+    [1,7,1],[2,7,1],[3,7,1],[2,8,1],[3,8,1],
+    [8,3,1],[9,3,1],[7,4,1],[8,4,1],[9,4,1],[10,4,1],
+    [8,5,1],[9,5,1],[10,5,1],[8,6,1],[9,6,1],[10,6,1],
+    [8,7,1],[9,7,1],[10,7,1],[8,8,1],[9,8,1],
+    [2,3,2],[3,3,2],[1,4,2],[2,4,2],[8,3,2],[9,3,2],[7,4,2],[8,4,2],
+  ],
+  fire:[
+    [5,0,0],[6,0,0],[4,1,0],[7,1,0],[3,2,0],[8,2,0],[2,3,0],[9,3,0],
+    [1,4,0],[10,4,0],[1,5,0],[10,5,0],[1,6,0],[10,6,0],[2,7,0],[9,7,0],
+    [3,8,0],[8,8,0],[4,9,0],[7,9,0],[5,10,0],[6,10,0],
+    [5,1,1],[6,1,1],[4,2,1],[5,2,1],[6,2,1],[7,2,1],
+    [3,3,1],[4,3,1],[5,3,1],[6,3,1],[7,3,1],[8,3,1],
+    [2,4,1],[3,4,1],[4,4,1],[5,4,1],[6,4,1],[7,4,1],[8,4,1],[9,4,1],
+    [2,5,1],[3,5,1],[4,5,1],[5,5,1],[6,5,1],[7,5,1],[8,5,1],[9,5,1],
+    [2,6,1],[3,6,1],[4,6,1],[5,6,1],[6,6,1],[7,6,1],[8,6,1],[9,6,1],
+    [3,7,1],[4,7,1],[5,7,1],[6,7,1],[7,7,1],[8,7,1],
+    [4,8,1],[5,8,1],[6,8,1],[7,8,1],[5,9,1],[6,9,1],
+    [5,1,2],[5,2,2],[4,3,2],[4,4,2],[3,5,2],[5,3,2],[5,4,2],
+  ],
+  shield:[
+    [0,0,0],[1,0,0],[2,0,0],[3,0,0],[4,0,0],[5,0,0],[6,0,0],[7,0,0],[8,0,0],[9,0,0],[10,0,0],[11,0,0],
+    [0,1,0],[11,1,0],[0,2,0],[11,2,0],[0,3,0],[11,3,0],[0,4,0],[11,4,0],
+    [1,5,0],[10,5,0],[2,6,0],[9,6,0],[3,7,0],[8,7,0],[4,8,0],[7,8,0],[5,9,0],[6,9,0],
+    [2,2,0],[3,2,0],[4,2,0],[5,2,0],[6,2,0],[7,2,0],[8,2,0],[9,2,0],
+    [2,3,0],[9,3,0],[2,4,0],[9,4,0],[2,5,0],[8,5,0],[2,6,0],[7,6,0],[3,7,0],[6,7,0],
+    [1,1,1],[2,1,1],[3,1,1],[4,1,1],[5,1,1],[6,1,1],[7,1,1],[8,1,1],[9,1,1],[10,1,1],
+    [1,2,1],[10,2,1],[1,3,1],[10,3,1],[1,4,1],[10,4,1],[1,5,1],[9,5,1],[1,6,1],[8,6,1],
+    [3,3,1],[4,3,1],[5,3,1],[6,3,1],[7,3,1],[8,3,1],
+    [3,4,1],[4,4,1],[5,4,1],[6,4,1],[7,4,1],[8,4,1],
+    [3,5,1],[4,5,1],[5,5,1],[6,5,1],[7,5,1],
+    [3,6,1],[4,6,1],[5,6,1],[6,6,1],[4,7,1],[5,7,1],
+    [1,1,2],[2,1,2],[3,1,2],[4,1,2],[1,2,2],[1,3,2],[1,4,2],
+  ],
+  share:[
+    [5,0,0],[6,0,0],[4,1,0],[7,1,0],[3,2,0],[8,2,0],
+    [0,6,0],[1,6,0],[2,6,0],[3,6,0],[8,6,0],[9,6,0],[10,6,0],[11,6,0],
+    [0,7,0],[11,7,0],[0,8,0],[11,8,0],[0,9,0],[11,9,0],
+    [0,10,0],[1,10,0],[2,10,0],[3,10,0],[4,10,0],[5,10,0],[6,10,0],[7,10,0],[8,10,0],[9,10,0],[10,10,0],[11,10,0],
+    [5,1,1],[6,1,1],[4,2,1],[5,2,1],[6,2,1],[7,2,1],
+    [5,3,1],[6,3,1],[5,4,1],[6,4,1],[5,5,1],[6,5,1],
+    [1,7,1],[2,7,1],[3,7,1],[4,7,1],[5,7,1],[6,7,1],[7,7,1],[8,7,1],[9,7,1],[10,7,1],
+    [1,8,1],[2,8,1],[3,8,1],[4,8,1],[5,8,1],[6,8,1],[7,8,1],[8,8,1],[9,8,1],[10,8,1],
+    [1,9,1],[2,9,1],[3,9,1],[4,9,1],[5,9,1],[6,9,1],[7,9,1],[8,9,1],[9,9,1],[10,9,1],
+    [5,1,2],[5,2,2],[4,2,2],[1,7,2],[2,7,2],[3,7,2],
+  ],
+};
+
+// ── Draw pixel icon on canvas ──────────────────────────────────────────────
+function drawPixelIcon(ctx, type, x, y, size, hexColor) {
+  const pixels = ICONS[type];
+  if (!pixels) return;
+  const GS = 12;
+  const pw = size / GS;
+  const base = hexToRgb(hexColor);
+  const white = [255,255,255];
+  const black = [0,0,0];
+  const dark = toRgb(lerpC(base,black,0.72));
+  const fill = toRgb(base);
+  const hi   = toRgb(lerpC(base,white,0.45));
+
+  ctx.imageSmoothingEnabled = false;
+  for (const [col,row,shade] of pixels) {
+    ctx.fillStyle = shade===0 ? dark : shade===2 ? hi : fill;
+    ctx.fillRect(Math.floor(x+col*pw), Math.floor(y+row*pw), Math.ceil(pw), Math.ceil(pw));
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SPACE BACKGROUND — ported from _StarfieldPainter in space_background.dart
+// ═══════════════════════════════════════════════════════════════════════════
+const COLORS_BG = [
+  [255,255,255],[170,221,255],[255,204,85],[204,136,255],[136,255,238],[255,136,204],[170,255,170]
+];
+
+function seededRnd(seed){
+  // simple LCG to match the Flutter seeded Random behavior (not identical but stable)
+  let s = seed;
+  return {
+    next:()=>{s=(1664525*s+1013904223)&0xFFFFFFFF; return (s>>>0)/0xFFFFFFFF},
+    nextInt:(n)=>{s=(1664525*s+1013904223)&0xFFFFFFFF; return ((s>>>0)%n)}
+  };
+}
+
+function buildStars(){
+  const stars=[];
+  // 300 tiny (small radius so they don't look huge on screen)
+  for(let i=0;i<300;i++){
+    const r=seededRnd(i*3571+13);
+    stars.push({x:r.next(),y:r.next(),radius:r.next()*0.5+0.12,brightness:r.next()*0.38+0.20,phase:r.next(),speed:r.next()*0.5+0.2,color:COLORS_BG[r.nextInt(7)]});
+  }
+  // 50 medium
+  for(let i=0;i<50;i++){
+    const r=seededRnd(i*9871+999);
+    stars.push({x:r.next(),y:r.next(),radius:r.next()*0.65+0.45,brightness:r.next()*0.28+0.45,phase:r.next(),speed:r.next()*0.35+0.15,color:COLORS_BG[r.nextInt(7)]});
+  }
+  // 10 bright with cross flare
+  for(let i=0;i<10;i++){
+    const r=seededRnd(i*4444+111);
+    stars.push({x:r.next(),y:r.next(),radius:r.next()*0.8+0.85,brightness:r.next()*0.2+0.70,phase:r.next(),speed:r.next()*0.2+0.08,color:[255,255,255],large:true});
+  }
+  // cluster top-right
+  for(let i=0;i<45;i++){
+    const r=seededRnd(i*1337+42);
+    stars.push({x:0.65+r.next()*0.28,y:0.05+r.next()*0.22,radius:r.next()*0.38+0.08,brightness:r.next()*0.35+0.35,phase:r.next(),speed:r.next()*0.6+0.3,color:COLORS_BG[r.nextInt(7)]});
+  }
+  // cluster bottom-left
+  for(let i=0;i<35;i++){
+    const r=seededRnd(i*2222+88);
+    stars.push({x:0.02+r.next()*0.25,y:0.60+r.next()*0.30,radius:r.next()*0.32+0.08,brightness:r.next()*0.28+0.28,phase:r.next(),speed:r.next()*0.5+0.2,color:COLORS_BG[r.nextInt(7)]});
+  }
+  return stars;
+}
+
+const SHOOTERS=[
+  {sx:0.10,sy:0.08,angle:0.52,speed:0.28,phase:0.00,len:0.20},
+  {sx:0.70,sy:0.05,angle:0.44,speed:0.22,phase:0.38,len:0.15},
+  {sx:0.30,sy:0.15,angle:0.60,speed:0.32,phase:0.68,len:0.18},
+  {sx:0.85,sy:0.20,angle:0.35,speed:0.19,phase:0.20,len:0.12},
+];
+
+const BG_STARS = buildStars();
+const bgCanvas = document.getElementById('bg');
+const bgCtx = bgCanvas.getContext('2d');
+let bgW,bgH;
+function resizeBg(){bgW=bgCanvas.width=window.innerWidth;bgH=bgCanvas.height=window.innerHeight}
+resizeBg();
+window.addEventListener('resize',resizeBg);
+
+function drawNebula(ctx,W,H,cx,cy,rf,rgb,op){
+  const x=cx*W,y=cy*H,r=rf*Math.max(W,H);
+  const grad=ctx.createRadialGradient(x,y,0,x,y,r);
+  grad.addColorStop(0,`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${op})`);
+  grad.addColorStop(1,'transparent');
+  ctx.fillStyle=grad;
+  ctx.fillRect(x-r,y-r,r*2,r*2);
+}
+
+function drawDistantGalaxy(ctx,W,H){
+  const cx=W*0.72,cy=H*0.18;
+  ctx.save();
+  ctx.translate(cx,cy);
+  ctx.rotate(-0.35);
+  const g1=ctx.createRadialGradient(0,0,0,0,0,60);
+  g1.addColorStop(0,'rgba(157,78,221,0.06)');g1.addColorStop(1,'transparent');
+  ctx.fillStyle=g1;ctx.beginPath();ctx.ellipse(0,0,60,22,0,0,Math.PI*2);ctx.fill();
+  const g2=ctx.createRadialGradient(0,0,0,0,0,30);
+  g2.addColorStop(0,'rgba(255,238,204,0.12)');g2.addColorStop(0.5,'rgba(157,78,221,0.04)');g2.addColorStop(1,'transparent');
+  ctx.fillStyle=g2;ctx.beginPath();ctx.ellipse(0,0,30,10,0,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+
+const OP = 0.55; // nebulaOpacity
+
+function paintBg(t){
+  bgCtx.fillStyle='#06040F';
+  bgCtx.fillRect(0,0,bgW,bgH);
+  // nebulae
+  drawNebula(bgCtx,bgW,bgH,0.10,0.15,0.65,[123,0,204],OP*0.55);
+  drawNebula(bgCtx,bgW,bgH,0.90,0.80,0.50,[204,0,102],OP*0.45);
+  drawNebula(bgCtx,bgW,bgH,0.85,0.10,0.40,[0,68,255],OP*0.42);
+  drawNebula(bgCtx,bgW,bgH,0.78,0.50,0.35,[0,187,170],OP*0.35);
+  drawNebula(bgCtx,bgW,bgH,0.15,0.85,0.40,[170,0,85],OP*0.38);
+  drawNebula(bgCtx,bgW,bgH,0.50,0.95,0.42,[187,102,0],OP*0.32);
+  drawNebula(bgCtx,bgW,bgH,0.50,0.42,0.50,[51,0,170],OP*0.28);
+  drawNebula(bgCtx,bgW,bgH,0.45,0.06,0.28,[0,204,221],OP*0.38);
+  drawNebula(bgCtx,bgW,bgH,0.08,0.50,0.30,[0,102,68],OP*0.30);
+  drawNebula(bgCtx,bgW,bgH,0.48,0.25,0.25,[157,78,221],OP*0.22);
+
+  drawDistantGalaxy(bgCtx,bgW,bgH);
+
+  const scale=Math.min(bgW,bgH)/400;
+  for(const s of BG_STARS){
+    const twinkle=0.55+0.45*Math.sin((t+s.phase)*s.speed*Math.PI*2);
+    const alpha=Math.max(0,Math.min(1,s.brightness*twinkle));
+    const [r2,g2,b2]=s.color;
+    const rad=s.radius*scale;
+    const cx2=s.x*bgW,cy2=s.y*bgH;
+    bgCtx.fillStyle=`rgba(${r2},${g2},${b2},${alpha})`;
+    bgCtx.beginPath();bgCtx.arc(cx2,cy2,rad,0,Math.PI*2);bgCtx.fill();
+    if(s.radius>2.0){
+      bgCtx.fillStyle=`rgba(${r2},${g2},${b2},${alpha*0.20})`;
+      bgCtx.beginPath();bgCtx.arc(cx2,cy2,rad*3.8,0,Math.PI*2);bgCtx.fill();
+      if(s.large){
+        bgCtx.strokeStyle=`rgba(${r2},${g2},${b2},${alpha*0.35})`;
+        bgCtx.lineWidth=rad*0.5;
+        bgCtx.beginPath();bgCtx.moveTo(cx2-rad*3,cy2);bgCtx.lineTo(cx2+rad*3,cy2);bgCtx.stroke();
+        bgCtx.beginPath();bgCtx.moveTo(cx2,cy2-rad*3);bgCtx.lineTo(cx2,cy2+rad*3);bgCtx.stroke();
+      }
+    }
+  }
+  // shooting stars
+  for(const s of SHOOTERS){
+    const lt=((t+s.phase)%1.0);
+    if(lt>0.12)continue;
+    const prog=lt/0.12;
+    const hx=(s.sx+Math.cos(s.angle)*s.speed*prog)*bgW;
+    const hy=(s.sy+Math.sin(s.angle)*s.speed*prog)*bgH;
+    const tx2=hx-Math.cos(s.angle)*s.len*bgW*(1.0-prog*0.3);
+    const ty2=hy-Math.sin(s.angle)*s.len*bgH*(1.0-prog*0.3);
+    const fade=prog<0.15?prog/0.15:(1.0-prog);
+    const grd=bgCtx.createLinearGradient(tx2,ty2,hx,hy);
+    grd.addColorStop(0,'rgba(255,255,255,0)');
+    grd.addColorStop(1,`rgba(255,255,255,${0.85*fade})`);
+    bgCtx.strokeStyle=grd;bgCtx.lineWidth=1.8;
+    bgCtx.beginPath();bgCtx.moveTo(tx2,ty2);bgCtx.lineTo(hx,hy);bgCtx.stroke();
+    bgCtx.fillStyle=`rgba(255,255,255,${0.75*fade})`;
+    bgCtx.beginPath();bgCtx.arc(hx,hy,2.5,0,Math.PI*2);bgCtx.fill();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HERO PIXEL STARS — static canvases, one per type
+// ═══════════════════════════════════════════════════════════════════════════
+const STAR_DEFS = [
+  {type:'normal',       color:'#FFD700', label:'NORMAL'},
+  {type:'supernova',    color:'#FF5733', label:'SUPERNOVA'},
+  {type:'event',        color:'#00E5CC', label:'EVENT'},
+  {type:'aurora',       color:'#00E5CC', label:'AURORA'},
+  {type:'sakura',       color:'#FF80AB', label:'SAKURA'},
+  {type:'crystal',      color:'#ADE8FF', label:'CRYSTAL'},
+  {type:'nebula',       color:'#CE93D8', label:'NEBULA'},
+  {type:'constellation',color:'#B0C4DE', label:'CONSTELL.'},
+  {type:'cosmic',       color:'#AA55FF', label:'COSMIC'},
+  {type:'comet',        color:'#D0E8FF', label:'COMET'},
+  {type:'legendary',    color:'#FFAA00', label:'LEGENDARY'},
+];
+
+const heroRow = document.getElementById('hero-stars-row');
+const heroStarCanvases = [];
+STAR_DEFS.forEach((sd,i)=>{
+  const c = document.createElement('canvas');
+  c.width = 40; c.height = 40;
+  c.style.imageRendering='pixelated';
+  c.style.color = sd.color;
+  heroRow.appendChild(c);
+  heroStarCanvases.push({c,sd});
+});
+
+function drawHeroStars(){
+  heroStarCanvases.forEach(({c,sd})=>{
+    const ctx=c.getContext('2d');
+    ctx.clearRect(0,0,40,40);
+    drawPixelStar(ctx,sd.type,2,2,36,sd.color,0.8);
+  });
+}
+drawHeroStars();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GALAXY DEMO CANVAS — animated living galaxy
+// ═══════════════════════════════════════════════════════════════════════════
+const galCanvas = document.getElementById('galaxy-canvas');
+const galCtx = galCanvas.getContext('2d');
+const GAL_W = 700;
+const GAL_H = 420;
+galCanvas.width = GAL_W;
+galCanvas.height = GAL_H;
+
+// Galaxy stars — deterministic placement
+function buildGalaxyStars(){
+  const stars=[];
+  const cx=GAL_W/2, cy=GAL_H/2;
+  const defs=[
+    // [count, types[], colors[], sizeRange, radiusRange]
+    [16, ['normal'],          ['#FFD700','#FFEE88','#FFFFFF'],            [13,17], [0.06,0.35]],
+    [10, ['supernova'],       ['#FF5733','#FF8800'],                      [15,21], [0.04,0.30]],
+    [7,  ['event'],           ['#00E5CC','#00BBAA'],                      [16,22], [0.05,0.28]],
+    [5,  ['nebula'],          ['#CE93D8','#BA68C8','#9D4EDD'],            [17,24], [0.06,0.22]],
+    [4,  ['constellation'],   ['#B0C4DE','#90A4AE'],                      [18,26], [0.05,0.20]],
+    [3,  ['cosmic'],          ['#AA55FF','#7B2FBE'],                      [18,26], [0.04,0.18]],
+    [2,  ['legendary'],       ['#FFAA00','#FFD700'],                      [20,28], [0.02,0.10]],
+    [4,  ['aurora'],          ['#00E5CC','#00FFDD'],                      [14,19], [0.06,0.30]],
+    [4,  ['sakura'],          ['#FF80AB','#FF4081'],                      [13,19], [0.07,0.28]],
+    [2,  ['solar'],           ['#FFAA00','#FFCC00'],                      [17,23], [0.03,0.15]],
+    [3,  ['phantom'],         ['#FF6B00','#FF8800'],                      [13,19], [0.05,0.24]],
+    [3,  ['comet'],           ['#D0E8FF','#E0F0FF'],                      [14,21], [0.06,0.26]],
+    [3,  ['nova'],            ['#FF4444','#FF6666'],                      [13,19], [0.04,0.22]],
+    [3,  ['crystal'],         ['#ADE8FF','#C8F4FF'],                      [14,21], [0.05,0.20]],
+  ];
+
+  let idx=0;
+  for(const [cnt,types,colors,szRange,rRange] of defs){
+    for(let i=0;i<cnt;i++){
+      const r=seededRnd(idx*1234+i*5678+99);
+      const rMin=rRange[0]*Math.min(GAL_W,GAL_H);
+      const rMax=rRange[1]*Math.min(GAL_W,GAL_H);
+      const dist=rMin+r.next()*(rMax-rMin);
+      const angle=r.next()*Math.PI*2;
+      const x=cx+Math.cos(angle)*dist*(GAL_W/GAL_H);
+      const y=cy+Math.sin(angle)*dist;
+      const sz=szRange[0]+r.next()*(szRange[1]-szRange[0]);
+      const type=types[r.nextInt(types.length)];
+      const color=colors[r.nextInt(colors.length)];
+      const phase=r.next();
+      const speed=r.next()*0.4+0.1;
+      stars.push({x,y,type,color,sz,phase,speed});
+      idx++;
+    }
+  }
+  return stars;
+}
+const GAL_STARS = buildGalaxyStars();
+
+function paintGalaxy(t){
+  const cx=GAL_W/2, cy=GAL_H/2;
+  const pulse=Math.sin(t*Math.PI*2)*0.5+0.5;
+
+  // ── Deep space background (#030308) ──
+  galCtx.fillStyle='#030308';
+  galCtx.fillRect(0,0,GAL_W,GAL_H);
+
+  // ── Procedural starfield — elliptical distribution (y×0.72) ──
+  const sfRnd=seededRnd(0xF0C05);
+  const sfPal=['#FFFFFF','#CCDDFF','#AABBFF','#88CCFF','#FFCCFF','#FFCC88','#88FFEE','#CC88FF','#FF88CC','#88FFBB'];
+  // 380 tiny bg (1px)
+  for(let i=0;i<380;i++){
+    const ang=sfRnd.next()*Math.PI*2;
+    const dist=Math.pow(sfRnd.next(),0.5)*GAL_W*0.52;
+    const x=cx+Math.cos(ang)*dist, y=cy+Math.sin(ang)*dist*0.72;
+    if(x<0||x>GAL_W||y<0||y>GAL_H){sfRnd.next();continue;}
+    const ph=sfRnd.next();
+    const tw=Math.sin((ph+t)*Math.PI*2);
+    const b=Math.max(0,Math.min(1,0.07+sfRnd.next()*0.22+tw*0.05));
+    galCtx.globalAlpha=b;
+    const ti=sfRnd.nextInt(5);
+    galCtx.fillStyle=ti===0?'#CCDDFF':ti===1?'#FFCC88':'#FFFFFF';
+    galCtx.fillRect(Math.floor(x),Math.floor(y),1,1);
+  }
+  // 80 mid colored (1-2px)
+  for(let i=0;i<80;i++){
+    const ang=sfRnd.next()*Math.PI*2;
+    const dist=Math.pow(sfRnd.next(),0.55)*GAL_W*0.52;
+    const x=cx+Math.cos(ang)*dist, y=cy+Math.sin(ang)*dist*0.72;
+    if(x<0||x>GAL_W||y<0||y>GAL_H){sfRnd.next();sfRnd.next();sfRnd.next();continue;}
+    const ph=sfRnd.next();
+    const tw=Math.sin((ph+t)*Math.PI*2);
+    const b=Math.max(0,Math.min(1,0.28+sfRnd.next()*0.42+tw*0.15));
+    galCtx.globalAlpha=b;
+    galCtx.fillStyle=sfPal[sfRnd.nextInt(10)];
+    const px=sfRnd.next()<0.5?1:2;
+    galCtx.fillRect(Math.floor(x),Math.floor(y),px,px);
+  }
+  // 20 accent with cross-flare
+  for(let i=0;i<20;i++){
+    const ang=sfRnd.next()*Math.PI*2;
+    const dist=Math.pow(sfRnd.next(),0.4)*GAL_W*0.42;
+    const x=cx+Math.cos(ang)*dist, y=cy+Math.sin(ang)*dist*0.72;
+    if(x<0||x>GAL_W||y<0||y>GAL_H){sfRnd.next();sfRnd.next();continue;}
+    const ph=sfRnd.next();
+    const tw=Math.sin((ph+t)*Math.PI*2);
+    const b=Math.max(0,Math.min(1,0.65+tw*0.30));
+    const c=sfPal[sfRnd.nextInt(10)];
+    galCtx.globalAlpha=b;
+    galCtx.fillStyle=c;
+    galCtx.fillRect(Math.floor(x),Math.floor(y),2,2);
+    const flare=Math.round(3+tw*3);
+    galCtx.globalAlpha=Math.max(0,b*0.45);
+    galCtx.fillRect(Math.floor(x-flare),Math.floor(y+0.5),flare*2+2,1);
+    galCtx.fillRect(Math.floor(x+0.5),Math.floor(y-flare),1,flare*2+2);
+  }
+  galCtx.globalAlpha=1;
+
+  // ── Nebulae — exact ports from _NebulaPainter._defs ──
+  // [angle, radiusFrac, [r,g,b], sizeFrac, baseOpacity]
+  const nebDefs=[
+    [0.75, 0.30, [255,0,136],  0.26, 0.11],
+    [2.00, 0.27, [0,204,255],  0.22, 0.09],
+    [3.70, 0.33, [119,0,255],  0.28, 0.08],
+    [5.10, 0.28, [0,255,170],  0.20, 0.07],
+    [1.40, 0.16, [255,170,0],  0.17, 0.10],
+    [4.30, 0.36, [255,68,187], 0.22, 0.06],
+    [2.90, 0.22, [68,136,255], 0.18, 0.08],
+  ];
+  const ss=Math.min(GAL_W,GAL_H);
+  for(const [ang,rf,col,sf2,baseOp] of nebDefs){
+    const nx=cx+Math.cos(ang)*rf*ss;
+    const ny=cy+Math.sin(ang)*rf*ss*0.72;
+    const nr=sf2*ss;
+    const al=(baseOp+0.025*pulse);
+    const grad=galCtx.createRadialGradient(nx,ny,0,nx,ny,nr);
+    grad.addColorStop(0,`rgba(${col[0]},${col[1]},${col[2]},${al})`);
+    grad.addColorStop(0.5,`rgba(${col[0]},${col[1]},${col[2]},${(al*0.35).toFixed(3)})`);
+    grad.addColorStop(1,'transparent');
+    galCtx.fillStyle=grad;
+    galCtx.beginPath();
+    galCtx.ellipse(nx,ny,nr,nr*0.75,0,0,Math.PI*2);
+    galCtx.fill();
+  }
+
+  // ── Warm golden core glow ──
+  const coreG=galCtx.createRadialGradient(cx,cy,0,cx,cy,ss*0.20);
+  coreG.addColorStop(0,`rgba(255,210,140,${0.18+0.06*pulse})`);
+  coreG.addColorStop(0.35,`rgba(200,120,60,${0.10+0.03*pulse})`);
+  coreG.addColorStop(0.7,`rgba(120,40,160,${0.07+0.02*pulse})`);
+  coreG.addColorStop(1,'transparent');
+  galCtx.fillStyle=coreG;
+  galCtx.fillRect(0,0,GAL_W,GAL_H);
+
+  // ── Pixel art session stars ──
+  for(const s of GAL_STARS){
+    const twinkle=0.68+0.32*Math.sin((t*2.5+s.phase)*s.speed*Math.PI*2);
+    galCtx.globalAlpha=twinkle;
+    drawPixelStar(galCtx,s.type,s.x-s.sz/2,s.y-s.sz/2,s.sz,s.color,0.55*twinkle);
+    galCtx.globalAlpha=1;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HOW IT WORKS ICONS
+// ═══════════════════════════════════════════════════════════════════════════
+const HOW_ICONS=[
+  {id:'how-icon-0',type:'clock',   color:'#00E5CC'},
+  {id:'how-icon-1',type:'star',    color:'#FFD700'},
+  {id:'how-icon-2',type:'infinite',color:'#9D4EDD'},
+  {id:'how-icon-3',type:'trophy',  color:'#FFAA00'},
+];
+HOW_ICONS.forEach(({id,type,color})=>{
+  const c=document.getElementById(id);
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  drawPixelIcon(ctx,type,2,2,40,color);
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FEATURE ICONS
+// ═══════════════════════════════════════════════════════════════════════════
+const FEAT_ICONS=[
+  {id:'fi-0',type:'clock',    color:'#00E5CC'},
+  {id:'fi-1',type:'star',     color:'#9D4EDD'},
+  {id:'fi-2',type:'target',   color:'#FFD700'},
+  {id:'fi-3',type:'chart',    color:'#4FC3F7'},
+  {id:'fi-4',type:'calendar', color:'#FFAA00'},
+  {id:'fi-5',type:'trophy',   color:'#FF80AB'},
+  {id:'fi-6',type:'shield',   color:'#FF5370'},
+];
+FEAT_ICONS.forEach(({id,type,color})=>{
+  const c=document.getElementById(id);
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  drawPixelIcon(ctx,type,2,2,36,color);
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STAR TYPES SHOWCASE
+// ═══════════════════════════════════════════════════════════════════════════
+const STAR_SHOWCASE=[
+  {type:'normal',       color:'#FFD700',  label:'NORMAL',        tag:'FREE',     tagC:'rgba(255,215,0,.15)',   tagTxt:'#FFD700'},
+  {type:'supernova',    color:'#FF5733',  label:'SUPERNOVA',     tag:'FREE',     tagC:'rgba(255,87,51,.15)',   tagTxt:'#FF5733'},
+  {type:'event',        color:'#00E5CC',  label:'EVENT',         tag:'FREE',     tagC:'rgba(0,229,204,.15)',   tagTxt:'#00E5CC'},
+  {type:'aurora',       color:'#00E5CC',  label:'AURORA',        tag:'SEASONAL', tagC:'rgba(0,229,204,.12)',   tagTxt:'#00E5CC'},
+  {type:'sakura',       color:'#FF80AB',  label:'SAKURA',        tag:'SEASONAL', tagC:'rgba(255,128,171,.15)', tagTxt:'#FF80AB'},
+  {type:'phantom',      color:'#FF6B00',  label:'PHANTOM',       tag:'SEASONAL', tagC:'rgba(255,107,0,.15)',   tagTxt:'#FF6B00'},
+  {type:'nova',         color:'#FF4444',  label:'NOVA',          tag:'SEASONAL', tagC:'rgba(255,68,68,.15)',   tagTxt:'#FF4444'},
+  {type:'crystal',      color:'#ADE8FF',  label:'CRYSTAL',       tag:'SEASONAL', tagC:'rgba(173,232,255,.15)', tagTxt:'#ADE8FF'},
+  {type:'nebula',       color:'#CE93D8',  label:'NEBULA',        tag:'PREMIUM',  tagC:'rgba(206,147,216,.2)',  tagTxt:'#CE93D8'},
+  {type:'constellation',color:'#B0C4DE',  label:'CONSTELL.',     tag:'PREMIUM',  tagC:'rgba(176,196,222,.2)',  tagTxt:'#B0C4DE'},
+  {type:'cosmic',       color:'#AA55FF',  label:'COSMIC',        tag:'PREMIUM',  tagC:'rgba(170,85,255,.2)',   tagTxt:'#AA55FF'},
+  {type:'comet',        color:'#D0E8FF',  label:'COMET',         tag:'PREMIUM',  tagC:'rgba(208,232,255,.2)',  tagTxt:'#D0E8FF'},
+  {type:'solar',        color:'#FFAA00',  label:'SOLAR',         tag:'PREMIUM',  tagC:'rgba(255,170,0,.2)',    tagTxt:'#FFAA00'},
+  {type:'legendary',    color:'#FFAA00',  label:'LEGENDARY',     tag:'PREMIUM',  tagC:'rgba(255,170,0,.2)',    tagTxt:'#FFAA00'},
+];
+
+const starsShowcase=document.getElementById('stars-showcase');
+const showcaseCanvases=[];
+STAR_SHOWCASE.forEach(sd=>{
+  const cell=document.createElement('div');
+  cell.className='star-cell';
+  const orb=document.createElement('div');
+  orb.className='star-orb';
+  orb.style.borderColor=sd.color+'80';
+  orb.style.background=sd.color+'11';
+  const c=document.createElement('canvas');
+  c.width=44;c.height=44;c.style.imageRendering='pixelated';
+  orb.appendChild(c);
+  const lbl=document.createElement('span');
+  lbl.className='star-lbl';lbl.style.color=sd.color;lbl.textContent=sd.label;
+  const tag=document.createElement('span');
+  tag.className='star-tag';tag.style.background=sd.tagC;tag.style.color=sd.tagTxt;tag.textContent=sd.tag;
+  cell.appendChild(orb);cell.appendChild(lbl);cell.appendChild(tag);
+  starsShowcase.appendChild(cell);
+  showcaseCanvases.push({c,sd});
+});
+function drawShowcaseStars(){
+  showcaseCanvases.forEach(({c,sd})=>{
+    const ctx=c.getContext('2d');
+    ctx.clearRect(0,0,44,44);
+    drawPixelStar(ctx,sd.type,2,2,40,sd.color,0.7);
+  });
+}
+drawShowcaseStars();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ACHIEVEMENTS — pixel art icon grid
+// ═══════════════════════════════════════════════════════════════════════════
+const ACH_DATA = [
+  {name:'FIRST LIGHT',     desc:'Complete your first session',    icon:'star',    color:'#FFD700'},
+  {name:'STAR COLLECTOR',  desc:'Earn 10 stars in your galaxy',   icon:'star',    color:'#FFD700'},
+  {name:'ON FIRE',         desc:'7-day streak',                   icon:'fire',    color:'#FF5733'},
+  {name:'UNSTOPPABLE',     desc:'30-day streak',                  icon:'bolt',    color:'#FFAA00'},
+  {name:'MARATHON',        desc:'60-minute focus session',        icon:'clock',   color:'#00E5CC'},
+  {name:'DEEP FOCUS',      desc:'5 sessions in one day',          icon:'target',  color:'#4FC3F7'},
+  {name:'GALAXY BUILDER',  desc:'Earn 50 stars',                  icon:'infinite',color:'#9D4EDD'},
+  {name:'COSMIC ARCHITECT',desc:'Earn 100 stars',                 icon:'crown',   color:'#AA55FF'},
+  {name:'EARLY BIRD',      desc:'Session before 7 AM',            icon:'star',    color:'#FFF176'},
+  {name:'NIGHT OWL',       desc:'Session after 11 PM',            icon:'star',    color:'#81D4FA'},
+  {name:'ZEN MASTER',      desc:'10 sessions of 45+ min',         icon:'infinite',color:'#BA68C8'},
+  {name:'SPEED RUNNER',    desc:'5 sessions in one day',          icon:'bolt',    color:'#FFD700'},
+  {name:'MISSION CRITICAL',desc:'20 sessions with mission',       icon:'target',  color:'#FF80AB'},
+  {name:'CENTURION',       desc:'100 focus sessions',             icon:'trophy',  color:'#FF5733'},
+  {name:'WEEKEND WARRIOR', desc:'3 sessions on a weekend',        icon:'shield',  color:'#CE93D8'},
+  {name:'EVENT MASTER',    desc:'Complete a scheduled event',     icon:'calendar',color:'#00E5CC'},
+  {name:'FIVE & ALIVE',    desc:'5-day streak',                   icon:'bolt',    color:'#FF9800'},
+  {name:'DECADE',          desc:'10-day streak',                  icon:'trophy',  color:'#FF6B35'},
+];
+
+const achGrid = document.getElementById('ach-grid');
+ACH_DATA.forEach(a => {
+  const card = document.createElement('div');
+  card.className = 'ach-card';
+  const wrap = document.createElement('div');
+  wrap.className = 'ach-icon-wrap';
+  const c = document.createElement('canvas');
+  c.width = 40; c.height = 40; c.style.imageRendering = 'pixelated';
+  wrap.appendChild(c);
+  const nm = document.createElement('p'); nm.className = 'ach-name'; nm.textContent = a.name;
+  const ds = document.createElement('p'); ds.className = 'ach-desc'; ds.textContent = a.desc;
+  card.appendChild(wrap); card.appendChild(nm); card.appendChild(ds);
+  achGrid.appendChild(card);
+  // Draw icon after appending (so canvas is in DOM)
+  const ctx = c.getContext('2d');
+  drawPixelIcon(ctx, a.icon, 2, 2, 36, a.color);
+  // Add colour glow border on hover via dataset
+  card.style.setProperty('--ach-c', a.color);
+  card.addEventListener('mouseenter', () => { card.style.borderColor = a.color + '60'; });
+  card.addEventListener('mouseleave', () => { card.style.borderColor = ''; });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PREMIUM FEATURES with pixel icons
+// ═══════════════════════════════════════════════════════════════════════════
+const PREM_FEATS_DATA=[
+  {icon:'star',     color:'#FFAA00',label:'All 7 Star Types'},
+  {icon:'bolt',     color:'#FFAA00',label:'XP Boost 1.5×'},
+  {icon:'calendar', color:'#FFAA00',label:'Programmable Events'},
+  {icon:'infinite', color:'#FFAA00',label:'Unlimited Galaxy'},
+  {icon:'chart',    color:'#FFAA00',label:'Advanced Stats'},
+  {icon:'share',    color:'#FFAA00',label:'Galaxy Sharing'},
+  {icon:'shield',   color:'#FFAA00',label:'Unlimited App Blocker'},
+];
+const pfEl=document.getElementById('prem-feats');
+const pfCanvases=[];
+PREM_FEATS_DATA.forEach((pf,i)=>{
+  const div=document.createElement('div');div.className='pf';
+  const c=document.createElement('canvas');
+  c.className='pf-icon';c.width=28;c.height=28;c.style.imageRendering='pixelated';
+  const sp=document.createElement('span');sp.textContent=pf.label;
+  div.appendChild(c);div.appendChild(sp);
+  pfEl.appendChild(div);
+  pfCanvases.push({c,pf});
+});
+pfCanvases.forEach(({c,pf})=>{
+  const ctx=c.getContext('2d');
+  drawPixelIcon(ctx,pf.icon,1,1,26,pf.color);
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HERO GALAXY CANVAS — mini floating stars parallax
+// ═══════════════════════════════════════════════════════════════════════════
+const hgCanvas=document.getElementById('hero-galaxy-canvas');
+const hgCtx=hgCanvas.getContext('2d');
+let hgW,hgH;
+function resizeHG(){
+  hgW=hgCanvas.width=hgCanvas.offsetWidth||window.innerWidth;
+  hgH=hgCanvas.height=hgCanvas.offsetHeight||window.innerHeight;
+}
+resizeHG();
+window.addEventListener('resize',resizeHG);
+
+// Floating hero galaxy stars
+const HERO_GAL_STARS=(()=>{
+  const s=[];
+  const types=['normal','supernova','constellation','cosmic','legendary'];
+  const cols=['#FFD700','#CE93D8','#00E5CC','#AA55FF','#FFAA00','#B0C4DE','#FFFFFF'];
+  for(let i=0;i<18;i++){
+    const r=seededRnd(i*7777+333);
+    s.push({
+      x:r.next(),y:r.next(),
+      sz:10+r.next()*16,
+      type:types[r.nextInt(5)],
+      color:cols[r.nextInt(7)],
+      phase:r.next(),speed:r.next()*0.3+0.05,
+      vy:(r.next()-0.5)*0.00008,
+    });
+  }
+  return s;
+})();
+
+function paintHeroGalaxy(t){
+  hgCtx.clearRect(0,0,hgW,hgH);
+  for(const s of HERO_GAL_STARS){
+    const twinkle=0.3+0.7*Math.abs(Math.sin((t*2+s.phase)*s.speed*Math.PI*2));
+    hgCtx.globalAlpha=twinkle*0.65;
+    const px=s.x*hgW;
+    const py=((s.y+t*s.vy*50)%1)*hgH;
+    drawPixelStar(hgCtx,s.type,px-s.sz/2,py-s.sz/2,s.sz,s.color,0.4*twinkle);
+    hgCtx.globalAlpha=1;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MAIN ANIMATION LOOP
+// ═══════════════════════════════════════════════════════════════════════════
+let start=null;
+function loop(ts){
+  if(!start)start=ts;
+  const t=((ts-start)/8000)%1; // 8s cycle matching Flutter
+  paintBg(t);
+  paintHeroGalaxy(t);
+  paintGalaxy(t);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+</script>
+</body>
+</html>
