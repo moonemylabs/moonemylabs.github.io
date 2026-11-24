@@ -1,0 +1,189 @@
+<!doctype html>
+<!--
+  Página de Plumo para moonemylabs.github.io/plumo/.
+  Generada por timebox/design/web/make_landing.py (editar ahí y volver a correr).
+  Concepto: la plantilla escrita a mano es la protagonista; la app mira hacia adelante
+  (siguiente evento, avisos, pendientes a mañana, alertas). Estilo pop pastel, sin mascota.
+  Día del lanzamiento: cambiar <span class="pill soon"> por <a class="pill" href="https://apps.apple.com/app/idXXXXXXXXXX">.
+-->
+<html lang="es" data-lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plumo</title>
+<meta name="description" content="Plumo: escribe tu día a mano en la plantilla time box de tu iPad. Plumo te recuerda lo que sigue, pasa lo pendiente a mañana y te avisa antes de que algo se complique.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Patrick+Hand&family=Nunito:wght@700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="../lang.js"></script>
+<style>
+  :root{--bg:#FFF8F0;--bg2:#FBF1E6;--card:#FFFFFF;--ink:#2E3A6B;--soft:#5A6285;--line:#EEE4D8;
+    --peach:#FFC9B5;--lilac:#CDB8F0;--mint:#BDE7D4;--butter:#FFE7A3;--sky:#BFDDF7;--rose:#F7B7C8;
+    --accent:#2E3A6B;--shadow:0 18px 50px rgba(46,58,107,.12);}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#24263A;--bg2:#2B2D44;--card:#30334C;--ink:#F0ECE4;--soft:#C3C6DA;--line:#3C3F5A;
+    --peach:#E8B3A2;--lilac:#B8A5DB;--mint:#A6D1BE;--butter:#E8D290;--sky:#A9C6E0;--rose:#DDA3B2;--accent:#F0ECE4;--shadow:0 18px 50px rgba(0,0,0,.35);}}
+  body{background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",Nunito,system-ui,sans-serif;}
+  .brand .dot{background:var(--lilac);box-shadow:0 0 0 4px rgba(205,184,240,.35);}
+  .pill.soon{background:var(--card);color:var(--ink);border:1.5px dashed var(--lilac);cursor:default;}
+  img.logo{display:block;width:96px;height:96px;border-radius:24px;box-shadow:var(--shadow);}
+  .hero h1{font-family:'Patrick Hand',cursive;font-weight:400;letter-spacing:0;font-size:clamp(60px,8.5vw,92px);line-height:1;margin:18px 0 12px;display:inline-flex;align-items:flex-start;gap:4px}
+  .hero h1 img{width:.8em;transform:rotate(12deg) translateY(-.12em)}
+  .hero h1 span{background:linear-gradient(90deg,var(--peach),var(--lilac));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ipad-stage{position:relative;display:flex;justify-content:center;min-width:0;width:100%;}
+  .hero>div{min-width:0}
+  .ipad{width:100%;max-width:440px;border-radius:36px;padding:14px;background:#1C1E2E;box-shadow:var(--shadow),inset 0 0 0 2px #32354A;}
+  .ipad svg{display:block;width:100%;height:auto;border-radius:22px}
+  .paper{fill:#FFFBF5}
+  .next{fill:#EEF5FD;stroke:#BFDDF7;stroke-width:1.5}.nextdot{fill:#7FB3E6}.nexttx{font:700 15px "Plus Jakarta Sans",sans-serif;fill:#2E3A6B}
+  .lb{font:800 12px "Plus Jakarta Sans",sans-serif;letter-spacing:1.6px;fill:#8C90AB}
+  .hr{font:700 14px "Plus Jakarta Sans",sans-serif;fill:#8C90AB}
+  .nm{font:800 14px "Plus Jakarta Sans",sans-serif;fill:#B4B8CC}
+  .hw{font:700 23px Caveat,cursive;fill:#2E3A6B}.hw.sm{font-size:19px}
+  .ln{stroke:#E9E2D7;stroke-width:1.3}.ln.dash{stroke-dasharray:3 4}
+  .dot{stroke:#DCD4C8;stroke-width:2;stroke-dasharray:1.5 7;stroke-linecap:round}
+  .pbox{fill:#FFFFFF;stroke:#EADFF8;stroke-width:1.5}.dump{fill:#FFFFFF;stroke:#EEE4D8;stroke-width:1.5}
+  .cell{fill:#FFFFFF;stroke:#EEE4D8;stroke-width:1.2}
+  .nowcell{fill:rgba(191,221,247,.45)}
+  .strike{stroke:#2E3A6B;stroke-width:2.4;stroke-linecap:round}
+  .b-sky{fill:#BFDDF7}.b-butter{fill:#FFE7A3}.b-lilac{fill:#CDB8F0}
+  .bi{font-size:12px}.bi.s{font-size:10px}.bi2{font:800 14px sans-serif;fill:#2E3A6B}
+  .c-mint{fill:#8FD1B3}.c-sky{fill:#8DBCE8}.c-peach{fill:#F4A88D}.c-lilac{fill:#AE93E3}
+  .mascot{position:absolute;z-index:4;width:112px;left:-64px;top:-48px;transform:rotate(-10deg);filter:drop-shadow(0 10px 18px rgba(46,58,107,.18));}
+  .mascot-row{display:flex;align-items:center;gap:18px}.mascot-row img{width:84px;flex:none;filter:drop-shadow(0 8px 14px rgba(46,58,107,.15))}
+  .toast{position:absolute;z-index:3;max-width:240px;background:var(--card);color:var(--ink);border-radius:20px;padding:12px 16px;box-shadow:var(--shadow);font-size:15px;line-height:1.35;border:1px solid var(--line)}
+  .toast b{display:block;font-size:12px;color:var(--soft);font-weight:800;letter-spacing:.3px}
+  .toast.l{left:-18px;top:58%}.toast.r{right:-18px;bottom:40px}
+  .toast.l{border-left:6px solid var(--sky)}.toast.r{border-left:6px solid var(--butter)}
+  .steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .steps div{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px}
+  .steps div::before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;color:#2E3A6B;font-weight:900;margin-bottom:10px;background:var(--peach)}
+  .steps div:nth-child(2)::before{background:var(--lilac)}.steps div:nth-child(3)::before{background:var(--mint)}
+  .steps strong{display:block;font-size:19px}.steps span{color:var(--soft)}
+  .feat{border-radius:26px}
+  .feat .ic{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:16px;font-size:22px;margin-bottom:12px;color:#2E3A6B}
+  .i-sky{background:var(--sky)}.i-peach{background:var(--peach)}.i-lilac{background:var(--lilac)}.i-butter{background:var(--butter)}.i-mint{background:var(--mint)}.i-rose{background:var(--rose)}
+  .alerts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .alert{display:flex;gap:14px;align-items:flex-start;border-radius:22px;padding:18px 20px;color:#2E3A6B}
+  .alert .ai{font-size:22px;line-height:1.2}.alert strong{display:block;font-size:18px}.alert span{opacity:.85}
+  .a-butter{background:var(--butter)}.a-peach{background:var(--peach)}.a-sky{background:var(--sky)}.a-lilac{background:var(--lilac)}.a-mint{background:var(--mint)}.a-rose{background:var(--rose)}
+  .tpls{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .tpl{border-radius:22px;padding:18px 20px;color:#2E3A6B;position:relative}
+  .tpl strong{display:block;font-size:18px}.tpl span{opacity:.85;font-size:15px}
+  .tpl::after{content:"";position:absolute;right:14px;top:14px;width:22px;height:28px;border-radius:5px;background:rgba(255,255,255,.65)}
+  .plans{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:24px}
+  .plan.plus{border:2px solid var(--lilac)}
+  .plan h3{margin:0;font-size:22px}.plan .price{color:var(--soft);font-weight:800;margin:2px 0 10px}.plan ul{margin:0;color:var(--soft)}
+  .privacy-card h2{font-size:26px;margin:0}
+  .privacy-card .ic{display:grid;place-items:center;width:72px;height:72px;border-radius:24px;background:var(--mint);font-size:34px;flex:none}
+
+  .heroband{background:#2E3A6B;color:#F6F1EA}
+  .heroband .nav a.link,.heroband .brand{color:#F6F1EA}
+  .heroband .langs{background:rgba(255,255,255,.12)}.heroband .langs button{color:#F6F1EA}
+  .heroband .langs button[aria-pressed="true"]{background:#F6F1EA;color:#2E3A6B}
+  .heroband .hero h1{color:#F6F1EA}.heroband p.lead{color:#D9DCEE}.heroband .note{color:#B9BEDA}
+  .heroband .pill.soon{background:transparent;color:#F6F1EA;border-color:#CDB8F0}
+  .heroband img.logo{background:#F6F1EA;padding:3px;border-radius:26px;width:100px;height:100px;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  @media (max-width:820px){.mascot{position:static;width:96px;transform:none;margin:0 auto -6px}.mascot-row{flex-direction:column;text-align:center}
+    .steps,.plans,.alerts,.tpls{grid-template-columns:1fr}
+    .toast,.toast.l,.toast.r{position:static;margin:0 auto 12px}.toast.r{margin:12px auto 0}.ipad-stage{flex-direction:column;align-items:center}}
+</style>
+</head>
+<body>
+<div class="heroband"><div class="wrap">
+  <nav class="nav">
+    <a class="brand" href="../"><span class="dot"></span>Moonemy Labs</a>
+    <span class="spacer"></span>
+    <a class="link" href="#funciones"><span lang="es">Funciones</span><span lang="en">Features</span></a>
+    <a class="link" href="#alertas"><span lang="es">Alertas</span><span lang="en">Alerts</span></a>
+    <a class="link" href="#plus">Plus</a>
+    <div class="langs" role="group" aria-label="Idioma / Language"><button data-l="es" aria-pressed="true">ES</button><button data-l="en" aria-pressed="false">EN</button></div>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <img class="logo" src="logo.png" alt="Plumo">
+      <h1>Plumo<img src="plumo_feliz.png" alt=""></h1>
+      <p class="lead" lang="es">Escribe tu día a mano, en tu plantilla. Plumo te recuerda lo que sigue, pasa lo pendiente a mañana y te avisa antes de que algo se complique.</p><p class="lead" lang="en">Write your day by hand, on your template. Plumo reminds you what's next, moves what's left to tomorrow and gives you a heads-up before things get messy.</p>
+      <span class="pill soon" aria-disabled="true"><span lang="es">Próximamente en la App Store</span><span lang="en">Coming soon to the App Store</span></span>
+      <p class="note" lang="es">Para iPad con Apple Pencil · Plus de pago único (US$3.99), sin suscripción · Español e inglés</p><p class="note" lang="en">For iPad with Apple Pencil · One-time Plus (US$3.99), no subscription · English and Spanish</p>
+    </div>
+    <div class="ipad-stage" aria-hidden="true">
+
+      <div class="toast l"><b><span lang="es">PLUMO · AHORA</span><span lang="en">PLUMO · NOW</span></b><span lang="es">10:30 · Revisar correo</span><span lang="en">10:30 · Check email</span></div>
+      <div class="ipad"><svg viewBox="0 0 600 840" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="840" rx="18" class="paper"/><rect x="20" y="16" width="560" height="44" rx="22" class="next"/><circle cx="44" cy="38" r="9" class="nextdot"/><text x="62" y="44" class="nexttx" lang="es">Siguiente · 10:30 Revisar correo · en 25 min</text><text x="62" y="44" class="nexttx" lang="en">Next · 10:30 Check email · in 25 min</text><text x="30" y="112" class="lb" lang="es">FECHA</text><text x="30" y="112" class="lb" lang="en">DATE</text><line x1="88" y1="114" x2="270" y2="114" class="ln"/><text x="96" y="108" class="hw" lang="es">lunes 7</text><text x="96" y="108" class="hw" lang="en">Mon 7</text><text x="30" y="158" class="lb" lang="es">PRIORIDADES</text><text x="30" y="158" class="lb" lang="en">TOP PRIORITIES</text><rect x="30" y="172" width="240" height="38" rx="10" class="pbox"/><text x="42" y="197" class="nm">1</text><text x="62" y="199" class="hw" lang="es">Terminar informe</text><text x="62" y="199" class="hw" lang="en">Finish report</text><g transform="translate(240 191)"><circle r="12" class="b-sky"/><text y="5" class="bi" text-anchor="middle">🔔</text></g><rect x="30" y="216" width="240" height="38" rx="10" class="pbox"/><text x="42" y="241" class="nm">2</text><text x="62" y="243" class="hw" lang="es">Pagar renta</text><text x="62" y="243" class="hw" lang="en">Pay rent</text><line x1="58" y1="237" x2="172" y2="235" class="strike"/><rect x="30" y="260" width="240" height="38" rx="10" class="pbox"/><text x="42" y="285" class="nm">3</text><text x="62" y="287" class="hw" lang="es">Caminar 20 min</text><text x="62" y="287" class="hw" lang="en">Walk 20 min</text><g transform="translate(240 279)"><circle r="12" class="b-butter"/><text y="5" class="bi" text-anchor="middle">⚠️</text></g><text x="30" y="328" class="lb" lang="es">BRAIN DUMP</text><text x="30" y="328" class="lb" lang="en">BRAIN DUMP</text><rect x="30" y="342" width="240" height="468" rx="12" class="dump"/><line x1="44" y1="378" x2="256" y2="378" class="dot"/><line x1="44" y1="416" x2="256" y2="416" class="dot"/><line x1="44" y1="454" x2="256" y2="454" class="dot"/><line x1="44" y1="492" x2="256" y2="492" class="dot"/><line x1="44" y1="530" x2="256" y2="530" class="dot"/><line x1="44" y1="568" x2="256" y2="568" class="dot"/><line x1="44" y1="606" x2="256" y2="606" class="dot"/><line x1="44" y1="644" x2="256" y2="644" class="dot"/><line x1="44" y1="682" x2="256" y2="682" class="dot"/><line x1="44" y1="720" x2="256" y2="720" class="dot"/><line x1="44" y1="758" x2="256" y2="758" class="dot"/><line x1="44" y1="796" x2="256" y2="796" class="dot"/><text x="48" y="372" class="hw sm" lang="es">comprar café</text><text x="48" y="372" class="hw sm" lang="en">buy coffee</text><text x="48" y="410" class="hw sm" lang="es">cita dentista</text><text x="48" y="410" class="hw sm" lang="en">dentist appt</text><g transform="translate(246 403)"><circle r="11" class="b-lilac"/><text y="5" class="bi2" text-anchor="middle">↪</text></g><text x="48" y="448" class="hw sm" lang="es">ideas para el blog</text><text x="48" y="448" class="hw sm" lang="en">blog ideas</text><text x="48" y="486" class="hw sm" lang="es">regalo de Ana</text><text x="48" y="486" class="hw sm" lang="en">gift for Ana</text><g transform="translate(246 479)"><circle r="11" class="b-lilac"/><text y="5" class="bi2" text-anchor="middle">↪</text></g><text x="368" y="112" class="lb">:00</text><text x="484" y="112" class="lb">:30</text><rect x="290" y="122" width="280" height="37" class="cell"/><line x1="338" y1="122" x2="338" y2="159" class="ln"/><line x1="454" y1="122" x2="454" y2="159" class="ln dash"/><text x="314" y="146" class="hr" text-anchor="middle">5</text><rect x="290" y="159" width="280" height="37" class="cell"/><line x1="338" y1="159" x2="338" y2="196" class="ln"/><line x1="454" y1="159" x2="454" y2="196" class="ln dash"/><text x="314" y="183" class="hr" text-anchor="middle">6</text><rect x="290" y="196" width="280" height="37" class="cell"/><line x1="338" y1="196" x2="338" y2="233" class="ln"/><line x1="454" y1="196" x2="454" y2="233" class="ln dash"/><text x="314" y="220" class="hr" text-anchor="middle">7</text><rect x="290" y="233" width="280" height="37" class="cell"/><line x1="338" y1="233" x2="338" y2="270" class="ln"/><line x1="454" y1="233" x2="454" y2="270" class="ln dash"/><text x="314" y="257" class="hr" text-anchor="middle">8</text><rect x="290" y="270" width="280" height="37" class="cell"/><line x1="338" y1="270" x2="338" y2="307" class="ln"/><line x1="454" y1="270" x2="454" y2="307" class="ln dash"/><text x="314" y="294" class="hr" text-anchor="middle">9</text><rect x="290" y="307" width="280" height="37" class="cell"/><line x1="338" y1="307" x2="338" y2="344" class="ln"/><line x1="454" y1="307" x2="454" y2="344" class="ln dash"/><text x="314" y="331" class="hr" text-anchor="middle">10</text><rect x="290" y="344" width="280" height="37" class="cell"/><line x1="338" y1="344" x2="338" y2="381" class="ln"/><line x1="454" y1="344" x2="454" y2="381" class="ln dash"/><text x="314" y="368" class="hr" text-anchor="middle">11</text><rect x="290" y="381" width="280" height="37" class="cell"/><line x1="338" y1="381" x2="338" y2="418" class="ln"/><line x1="454" y1="381" x2="454" y2="418" class="ln dash"/><text x="314" y="405" class="hr" text-anchor="middle">12</text><rect x="290" y="418" width="280" height="37" class="cell"/><line x1="338" y1="418" x2="338" y2="455" class="ln"/><line x1="454" y1="418" x2="454" y2="455" class="ln dash"/><text x="314" y="442" class="hr" text-anchor="middle">1</text><rect x="290" y="455" width="280" height="37" class="cell"/><line x1="338" y1="455" x2="338" y2="492" class="ln"/><line x1="454" y1="455" x2="454" y2="492" class="ln dash"/><text x="314" y="479" class="hr" text-anchor="middle">2</text><rect x="290" y="492" width="280" height="37" class="cell"/><line x1="338" y1="492" x2="338" y2="529" class="ln"/><line x1="454" y1="492" x2="454" y2="529" class="ln dash"/><text x="314" y="516" class="hr" text-anchor="middle">3</text><rect x="290" y="529" width="280" height="37" class="cell"/><line x1="338" y1="529" x2="338" y2="566" class="ln"/><line x1="454" y1="529" x2="454" y2="566" class="ln dash"/><text x="314" y="553" class="hr" text-anchor="middle">4</text><rect x="290" y="566" width="280" height="37" class="cell"/><line x1="338" y1="566" x2="338" y2="603" class="ln"/><line x1="454" y1="566" x2="454" y2="603" class="ln dash"/><text x="314" y="590" class="hr" text-anchor="middle">5</text><rect x="290" y="603" width="280" height="37" class="cell"/><line x1="338" y1="603" x2="338" y2="640" class="ln"/><line x1="454" y1="603" x2="454" y2="640" class="ln dash"/><text x="314" y="627" class="hr" text-anchor="middle">6</text><rect x="290" y="640" width="280" height="37" class="cell"/><line x1="338" y1="640" x2="338" y2="677" class="ln"/><line x1="454" y1="640" x2="454" y2="677" class="ln dash"/><text x="314" y="664" class="hr" text-anchor="middle">7</text><rect x="290" y="677" width="280" height="37" class="cell"/><line x1="338" y1="677" x2="338" y2="714" class="ln"/><line x1="454" y1="677" x2="454" y2="714" class="ln dash"/><text x="314" y="701" class="hr" text-anchor="middle">8</text><rect x="290" y="714" width="280" height="37" class="cell"/><line x1="338" y1="714" x2="338" y2="751" class="ln"/><line x1="454" y1="714" x2="454" y2="751" class="ln dash"/><text x="314" y="738" class="hr" text-anchor="middle">9</text><rect x="290" y="751" width="280" height="37" class="cell"/><line x1="338" y1="751" x2="338" y2="788" class="ln"/><line x1="454" y1="751" x2="454" y2="788" class="ln dash"/><text x="314" y="775" class="hr" text-anchor="middle">10</text><rect x="455" y="308" width="114" height="35" class="nowcell"/><rect x="338" y="300" width="4" height="4" rx="2" class="c-mint"/><text x="344" y="295" class="hw sm" lang="es">Gimnasio</text><text x="344" y="295" class="hw sm" lang="en">Gym</text><line x1="342" y1="289" x2="422" y2="287" class="strike"/><rect x="454" y="337" width="4" height="4" rx="2" class="c-sky"/><text x="460" y="332" class="hw sm" lang="es">Revisar correo</text><text x="460" y="332" class="hw sm" lang="en">Check email</text><g transform="translate(554 325)"><circle r="10" class="b-sky"/><text y="4" class="bi s" text-anchor="middle">🔔</text></g><rect x="338" y="374" width="4" height="4" rx="2" class="c-sky"/><text x="344" y="369" class="hw sm" lang="es">Informe</text><text x="344" y="369" class="hw sm" lang="en">Report</text><g transform="translate(442 362)"><circle r="10" class="b-sky"/><text y="4" class="bi s" text-anchor="middle">🔔</text></g><rect x="454" y="374" width="4" height="4" rx="2" class="c-sky"/><text x="460" y="369" class="hw sm" lang="es">Informe</text><text x="460" y="369" class="hw sm" lang="en">Report</text><rect x="338" y="448" width="4" height="4" rx="2" class="c-peach"/><text x="344" y="443" class="hw sm" lang="es">Comida 1-2</text><text x="344" y="443" class="hw sm" lang="en">Lunch 1-2</text><rect x="454" y="448" width="4" height="4" rx="2" class="c-sky"/><text x="460" y="443" class="hw sm" lang="es">Llamada equipo</text><text x="460" y="443" class="hw sm" lang="en">Team call</text><g transform="translate(554 436)"><circle r="10" class="b-butter"/><text y="4" class="bi s" text-anchor="middle">⚠️</text></g><rect x="338" y="485" width="4" height="4" rx="2" class="c-lilac"/><text x="344" y="480" class="hw sm" lang="es">Llamar a mamá</text><text x="344" y="480" class="hw sm" lang="en">Call mom</text><g transform="translate(442 473)"><circle r="10" class="b-sky"/><text y="4" class="bi s" text-anchor="middle">🔔</text></g><rect x="454" y="633" width="4" height="4" rx="2" class="c-lilac"/><text x="460" y="628" class="hw sm" lang="es">Leer</text><text x="460" y="628" class="hw sm" lang="en">Read</text></svg></div>
+      <div class="toast r"><b><span lang="es">ALERTA</span><span lang="en">HEADS-UP</span></b><span lang="es">1:30 · «Llamada equipo» choca con «Comida 1-2».</span><span lang="en">1:30 · “Team call” clashes with “Lunch 1-2”.</span></div>
+    </div>
+  </section>
+</div></div>
+
+<section class="band alt"><div class="wrap">
+  <h2 lang="es">Sabemos lo importante que es para ti escribir a mano.</h2><h2 lang="en">We know how much writing by hand means to you.</h2>
+  <p class="sub" lang="es">Plumo te ayuda a seguir haciéndolo: tú escribes en tu plantilla como siempre, y Plumo se encarga de recordarte lo que sigue, pasar lo pendiente a mañana y avisarte a tiempo.</p><p class="sub" lang="en">Plumo helps you keep doing it: you write on your template as always, and Plumo takes care of reminding you what's next, carrying what's left to tomorrow and giving you a heads-up in time.</p>
+  <div class="steps">
+    <div><strong lang="es">Llena tu plantilla</strong><strong lang="en">Fill your template</strong><span lang="es">Fecha, 3 prioridades, brain dump y bloques de media hora, con tu Apple Pencil. Tal cual en papel.</span><span lang="en">Date, top 3 priorities, brain dump and half-hour blocks, with your Apple Pencil. Just like paper.</span></div>
+    <div><strong lang="es">Plumo lo entiende</strong><strong lang="en">Plumo understands it</strong><span lang="es">Lee tu letra dentro de tu iPad y te muestra lo que entendió. Si algo se leyó mal, lo tocas y lo corriges.</span><span lang="en">It reads your handwriting on your iPad and shows what it understood. Misread? Tap and fix.</span></div>
+    <div><strong lang="es">Te lleva al siguiente paso</strong><strong lang="en">It keeps you on track</strong><span lang="es">Avisos por bloque, lo siguiente siempre a la vista, pendientes a mañana y alertas a tiempo.</span><span lang="en">Block reminders, what's next always visible, carry-over to tomorrow and timely heads-ups.</span></div>
+  </div>
+</div></section>
+
+<section class="band" id="funciones"><div class="wrap">
+  <h2 lang="es">Lo que tu hoja de papel no puede hacer</h2><h2 lang="en">What your paper planner can't do</h2>
+  <p class="sub" lang="es">Tu letra queda como la escribiste. Plumo agrega marcas pequeñas a un lado: 🔔 aviso, ↪ pasa a mañana, ⚠️ alerta.</p><p class="sub" lang="en">Your handwriting stays as you wrote it. Plumo adds small marks beside it: 🔔 reminder, ↪ carries over, ⚠️ heads-up.</p>
+  <div class="grid"><div class="feat"><span class="ic i-sky">⏭</span><h3 lang="es">Siempre sabes qué sigue</h3><h3 lang="en">Always know what's next</h3><p lang="es">Arriba de tu página: el próximo bloque y cuánto falta. Un toque y te lleva a esa hora.</p><p lang="en">At the top of your page: the next block and how long until it starts. Tap to jump there.</p></div><div class="feat"><span class="ic i-peach">🔔</span><h3 lang="es">Un aviso en cada bloque</h3><h3 lang="en">A reminder for every block</h3><p lang="es">Lo que escribes a las 10:30 te avisa a las 10:30. Puedes apagar cada aviso.</p><p lang="en">What you write at 10:30 reminds you at 10:30. Turn any reminder off.</p></div><div class="feat"><span class="ic i-lilac">↪</span><h3 lang="es">Lo pendiente pasa a mañana</h3><h3 lang="en">What's left moves to tomorrow</h3><p lang="es">Brain dump y bloques sin tachar aparecen en tu página de mañana, marcados.</p><p lang="en">Unfinished brain-dump items and blocks show up on tomorrow's page, marked.</p></div><div class="feat"><span class="ic i-butter">⚠️</span><h3 lang="es">Alertas antes de que se complique</h3><h3 lang="en">Heads-up before it gets messy</h3><p lang="es">Choques de horario, días sobrecargados, prioridades sin hora y temas que se mueven mucho.</p><p lang="en">Time clashes, overloaded days, priorities with no time and items that keep moving.</p></div><div class="feat"><span class="ic i-mint">✍️</span><h3 lang="es">Tu letra, intacta</h3><h3 lang="en">Your handwriting, untouched</h3><p lang="es">Las marcas van al lado de tu letra, nunca encima. Ocúltalas y la página se ve como papel.</p><p lang="en">Marks sit next to your writing, never over it. Hide them and the page looks like paper.</p></div><div class="feat"><span class="ic i-rose">📊</span><h3 lang="es">Tu día y tu semana</h3><h3 lang="en">Your day and week</h3><p lang="es">Qué hiciste, en qué se fue el tiempo, lo planeado frente a lo hecho y lo que se sigue moviendo.</p><p lang="en">What you did, where time went, planned vs. done and what keeps moving.</p></div></div>
+  <p class="note" lang="es">En iPad compatibles con Apple Intelligence, la lectura de tus tareas y los resúmenes son más precisos. En los demás iPad todo funciona igual, con reglas más sencillas.</p><p class="note" lang="en">On iPads that support Apple Intelligence, task understanding and summaries are more precise. On other iPads everything works too, with simpler rules.</p>
+</div></section>
+
+<section class="band alt" id="alertas"><div class="wrap">
+  <div class="mascot-row"><img src="plumo_guino.png" alt=""><div><h2 lang="es">Alertas antes de que el día se complique</h2><h2 lang="en">A heads-up before your day gets messy</h2>
+  <p class="sub" lang="es">Cortas, claras y sin regaños. Tú decides cuáles quieres.</p><p class="sub" lang="en">Short, clear and never preachy. You choose which ones you want.</p></div></div>
+  <div class="alerts"><div class="alert a-butter"><span class="ai">⚠️</span><div><strong lang="es">Choque de horario</strong><strong lang="en">Time clash</strong><span lang="es">"Llamada equipo" (1:30) choca con "Comida 1-2".</span><span lang="en">"Team call" (1:30) clashes with "Lunch 1-2".</span></div></div><div class="alert a-peach"><span class="ai">⏳</span><div><strong lang="es">Día sobrecargado</strong><strong lang="en">Overloaded day</strong><span lang="es">Quedan 6 horas libres y planeaste 8.</span><span lang="en">6 free hours left, 8 planned.</span></div></div><div class="alert a-sky"><span class="ai">🎯</span><div><strong lang="es">Prioridad sin hora</strong><strong lang="en">Priority with no time</strong><span lang="es">"Caminar 20 min" aún no tiene bloque. ¿Le buscamos un hueco?</span><span lang="en">"Walk 20 min" has no block yet. Find a slot?</span></div></div><div class="alert a-lilac"><span class="ai">↪</span><div><strong lang="es">Se ha movido 3 veces</strong><strong lang="en">Moved 3 times</strong><span lang="es">"Cita dentista" pasa de día en día.</span><span lang="en">"Dentist appt" keeps moving day to day.</span></div></div></div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2 lang="es">Más plantillas, la misma magia</h2><h2 lang="en">More templates, same magic</h2>
+  <p class="sub" lang="es">Empezamos con el Time Box. Después vienen otras plantillas que también se llenan a mano y te avisan.</p><p class="sub" lang="en">We start with the Time Box. More hand-filled templates with smart reminders are on the way.</p>
+  <div class="tpls"><div class="tpl a-sky"><strong lang="es">Semana a la vista</strong><strong lang="en">Week at a glance</strong><span lang="es">Avisos por día y resumen semanal</span><span lang="en">Daily reminders and a weekly summary</span></div><div class="tpl a-mint"><strong lang="es">Hábitos del mes</strong><strong lang="en">Monthly habits</strong><span lang="es">Marca con ✓ y mira tu mes, sin rachas</span><span lang="en">Tick with ✓ and see your month, no streaks</span></div><div class="tpl a-butter"><strong lang="es">Urgente / importante</strong><strong lang="en">Urgent / important</strong><span lang="es">Lo urgente pasa a tu Time Box de hoy</span><span lang="en">Urgent items go to today's Time Box</span></div><div class="tpl a-peach"><strong lang="es">Comidas de la semana</strong><strong lang="en">Weekly meals</strong><span lang="es">Lista de compras a partir de tu letra</span><span lang="en">A shopping list from your handwriting</span></div><div class="tpl a-lilac"><strong lang="es">Plan de estudio</strong><strong lang="en">Study plan</strong><span lang="es">Avisos antes de cada entrega</span><span lang="en">Reminders before each deadline</span></div><div class="tpl a-rose"><strong lang="es">Diario breve</strong><strong lang="en">Short journal</strong><span lang="es">Resumen del mes</span><span lang="en">A summary of your month</span></div></div>
+  <p class="note" lang="es">Próximamente. Las plantillas pueden cambiar.</p><p class="note" lang="en">Coming later. Templates may change.</p>
+</div></section>
+
+<section class="band alt" id="plus"><div class="wrap">
+  <h2 lang="es">Gratis para cada día. Plus, una sola vez.</h2><h2 lang="en">Free for every day. Plus, just once.</h2>
+  <p class="sub" lang="es">Sin suscripción y sin cobros automáticos.</p><p class="sub" lang="en">No subscription and no automatic charges.</p>
+  <div class="plans">
+    <div class="plan">
+      <h3 lang="es">Gratis</h3><h3 lang="en">Free</h3><p class="price" lang="es">Para siempre</p><p class="price" lang="en">Forever</p>
+      <ul lang="es"><li>Días ilimitados con la plantilla time box</li><li>Lectura de tu letra y corrección</li><li>Aviso en cada bloque y "Siguiente" a la vista</li><li>Alertas del día</li><li>Pasar pendientes a mañana, eligiendo de una lista</li><li>Resumen del día</li></ul>
+      <ul lang="en"><li>Unlimited days with the time box template</li><li>Handwriting reading and corrections</li><li>Block reminders and "Next" always visible</li><li>Daily heads-ups</li><li>Carry what's left to tomorrow, picking from a list</li><li>Daily summary</li></ul>
+    </div>
+    <div class="plan plus">
+      <h3>Plumo Plus</h3><p class="price" lang="es">US$3.99 · pago único</p><p class="price" lang="en">US$3.99 · one-time</p>
+      <ul lang="es"><li>Informe de la semana: en qué se fue tu tiempo, planeado frente a hecho y lo que se sigue moviendo</li><li>Pendientes que pasan solos a mañana</li><li>Buscar en días anteriores</li></ul>
+      <ul lang="en"><li>Weekly report: where your time went, planned vs. done and what keeps moving</li><li>Unfinished items carry over automatically</li><li>Search past days</li></ul>
+    </div>
+  </div>
+  <p class="note" lang="es">El precio puede variar según el país; la App Store lo muestra en tu moneda.</p><p class="note" lang="en">Price may vary by country; the App Store shows it in your currency.</p>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="privacy-card">
+    <span class="ic" aria-hidden="true">🔒</span>
+    <div>
+      <h2 lang="es">Tu letra se queda en tu iPad</h2><h2 lang="en">Your handwriting stays on your iPad</h2>
+      <p lang="es">La lectura de tu letra, los avisos y los informes se hacen dentro del iPad. Sin cuenta, sin rastreo y sin publicidad. <a href="privacy.html">Lee la política de privacidad</a>.</p>
+      <p lang="en">Handwriting reading, reminders and reports happen on your iPad. No account, no tracking, no ads. <a href="privacy.html">Read the privacy policy</a>.</p>
+    </div>
+  </div>
+  <p class="note" lang="es">Plumo no está afiliada a ninguna marca de plantillas o agendas.</p><p class="note" lang="en">Plumo is not affiliated with any planner or template brand.</p>
+  <p class="note" lang="es">¿Preguntas? Escríbenos a <a href="mailto:moonemylabs@icloud.com?subject=Plumo">moonemylabs@icloud.com</a>.</p>
+  <p class="note" lang="en">Questions? Write to <a href="mailto:moonemylabs@icloud.com?subject=Plumo">moonemylabs@icloud.com</a>.</p>
+</div></section>
+
+<footer class="foot"><div class="wrap">
+  <span>© 2026 Moonemy Labs</span>
+  <span><a href="privacy.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a> · <a href="terms.html"><span lang="es">Términos</span><span lang="en">Terms</span></a> · <a href="mailto:moonemylabs@icloud.com?subject=Plumo">moonemylabs@icloud.com</a></span>
+</div></footer>
+</body>
+</html>
